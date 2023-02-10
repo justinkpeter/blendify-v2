@@ -1,10 +1,9 @@
+import { Login } from "./Login";
 
 function App() {
   return (
     <div>
-      <header >
-        hello
-      </header>
+        <Login />
     </div>
   );
 }
