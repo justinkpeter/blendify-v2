@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Login } from "./Login";
 import { Dashboard } from "./Dashboard";
+import { Navbar } from "./components/Navbar";
 
 import { useDataLayerValue } from "./utils/DataLayer";
 import { getTokenFromUrl } from "./auth/spotify";
@@ -44,6 +45,7 @@ function App() {
 
   return (
     <div>
+        <Navbar/>
         {token ? <Dashboard/> : <Login />}
     </div>
   );
