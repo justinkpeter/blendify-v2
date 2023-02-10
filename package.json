@@ -15,6 +15,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
+    "resize-observer-polyfill": "^1.5.1",
     "spotify-web-api-js": "^1.5.2",
     "three": "^0.135.0",
     "vanta": "^0.5.24",
