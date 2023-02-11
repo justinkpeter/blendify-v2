@@ -5,6 +5,12 @@ export const initialState = {
     item: null,
     //TODO: remove after developing
     //token: "BQAXMJ7XJB5BHLSCJGQtSzUvC8sWa8v7XV_NUsCiVq1fakZGw1VnUAbgg8S_HCPPcLAnpbcIyPjW7Nf0FICbUcHAQxBXjOK7WQ6ZkwlMJerdLI3XuxJ_MgZ4u3vvHZIw4AX1H2HOkdde5uK66-4vytsgR2MHxjch35VR9U2JuEdvu14oUmxtEHNIDElQXkbv"
+    shortTermTopArtists: [],
+    shortTermTopTracks: [],
+    mediumTermTopTracks: [],
+    mediumTermTopArtists: [],
+    longTermTopTracks: [],
+    longTermTopArtists: [],
 }
 const reducer = (state, action) => {
     //Action -> type, [payload]
@@ -20,17 +26,21 @@ const reducer = (state, action) => {
                 ...state,
                 token: action.token
             }
-        case 'SET_PLAYLISTS':
-            return{
+        case 'shortTermTopArtists':
+            return {
                 ...state,
-                playlists: action.playlists
+                shortTermTopArtists: action.shortTermTopArtists
             }
-        case 'SET_DISCOVER_WEEKLY':
-            return{
+        case 'mediumTermTopArtists':
+            return {
                 ...state,
-                discover_weekly: action.discover_weekly
+                mediumTermTopArtists: action.mediumTermTopArtists
             }
-
+        case 'longTermTopArtists':
+            return {
+                ...state,
+                longTermTopArtists: action.longTermTopArtists
+            }
         default:
             return state
     }
