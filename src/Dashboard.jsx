@@ -2,7 +2,7 @@ import { useRef, useState, useLayoutEffect, useCallback, forwardRef } from "reac
 import ResizeObserver from "resize-observer-polyfill"
 import { motion, useTransform, useSpring, useScroll} from "framer-motion"
 
-
+import { FavoriteArtists } from "./components/FavoriteArtists";
 
 const ScrollContainer = ({ children }) => {
     return(
@@ -14,7 +14,7 @@ const ScrollContainer = ({ children }) => {
 
 const SectionContainer = forwardRef(({ children, style }, ref) => {
     return(
-        <motion.div className={'fixed h-screen max-w-fit flex items-center bg-black/80 scrollbar-hide'} ref={ref} style={style}>
+        <motion.div className={'fixed h-screen max-w-fit flex items-center scrollbar-hide'} ref={ref} style={style}>
             {children}
         </motion.div>
     )
@@ -23,21 +23,21 @@ const SectionContainer = forwardRef(({ children, style }, ref) => {
 
 const Sections = ({ children, id }) => {
     return(
-        <div className={'relative flex border-2 border-green-200'}>
+        <div className={'relative flex bg-zinc-900'}>
             {children}
         </div>
     )
 }
 
-const Section = ({ children, id }) => {
-    return(
-        <div className={'grid grid-cols-26 grid-rows-10 h-section'}>
-            {children}
-        </div>
-    )
-}
+// const Section = ({ children, id }) => {
+//     return(
+//         <div className={'grid grid-cols-26 grid-rows-10 h-section'}>
+//             {children}
+//         </div>
+//     )
+// }
 
-export const Dashboard = () => {
+export const Dashboard = ({children}) => {
 
     const scrollRef = useRef(null)
     const ghostRef = useRef(null)
@@ -74,15 +74,7 @@ export const Dashboard = () => {
             <ScrollContainer>
                 <SectionContainer ref={scrollRef} style={{x:spring}}>
                     <Sections>
-                        <Section>
-                            <div className={'col-[10_/_span_4] row-[3_/_span_4] bg-red-500'}>1</div>
-                        </Section>
-                        <Section>
-                            <div className={'col-[10_/_span_4] row-[3_/_span_4] bg-blue-500'}>2</div>
-                        </Section>
-                        <Section>
-                            <div className={'col-[10_/_span_4] row-[3_/_span_4] bg-green-500'}>2</div>
-                        </Section>
+                        {children}
                     </Sections>
                 </SectionContainer>
             </ScrollContainer>
