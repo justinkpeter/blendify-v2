@@ -25,6 +25,9 @@
     width: 40vh;
     height: 50vh;
     object-fit: cover;
+    transition: ease-in-out;
+    transition-duration: 1000ms;
+    transform-origin: center;
 }
 .artist-card-image-overlay{
     width: 100%;
@@ -37,4 +40,233 @@
     z-index: 0;
     opacity: 0.4;
     background-image: linear-gradient(69.29deg, rgba(26, 27, 28, 0.7), rgba(26, 27, 28, 0.7));
+    transition: ease-in-out;
+    transition-duration: 1000ms;
 }
+.artist-card-content{
+    width: 100%;
+    padding: 1rem 1.25rem;
+    position: absolute;
+    top: 0;
+}
+.artist-card:hover img {
+    transform: scale3d(110%, 110%, 110%);
+    transition: ease-in-out;
+    transition-duration: 800ms;
+}
+
+.artist-card:hover .artist-card-image-overlay{
+    opacity: 1;
+    transition-duration: 0.5s;
+    transition-timing-function: cubic-bezier(0.64, 0.04, 0.35, 1);
+    transition-delay: 0s;
+    transition-property: all;
+}
+
+.artist-card-player{
+    position: absolute;
+    bottom: 1.25rem;
+    right: 1.25rem;
+    border-radius: 9999px;
+    width: 2.5rem;
+    height: 2.5rem;
+    z-index: 30;
+    /*background-color: #18181b*/
+}
+
+.backdrop{
+    scale: 1;
+    width: 100%;
+    height: 100%;
+    border-radius: 9999px;
+    transition: ease-in-out;
+    transform-origin: center;
+    transition-duration: 0.3s;
+    transition-timing-function: cubic-bezier(0.64, 0.04, 0.35, 1);
+    transition-delay: 200ms;
+    transition-property: all;
+    z-index: 30;
+    background-color: #18181b
+}
+
+.artist-card-player:hover .backdrop{
+     scale:13;
+     background-color: rgb(154 52 18);
+     color: white;
+     transition: ease-in-out;
+     transform-origin: center;
+     transition-duration: 0.3s;
+     transition-timing-function: cubic-bezier(0.64, 0.04, 0.35, 1);
+     transition-delay: 0s;
+     transition-property: all;
+ }
+
+.artist-card-player:hover .icon{
+    color: white;
+    transition: ease-in-out;
+    transform-origin: center;
+    transition-duration: 0.3s;
+    transition-timing-function: cubic-bezier(0.64, 0.04, 0.35, 1);
+    transition-delay: 0s;
+    transition-property: all;
+}
+
+.icon{
+    color: inherit;
+}
+
+.track-details{
+    position:absolute;
+    bottom: 0;
+    right: 3rem;
+    width: fit-content;
+    height: fit-content;
+    z-index: 50;
+    opacity: 0;
+    transition-duration: 0.6s;
+    transition-timing-function: cubic-bezier(0.64, 0.04, 0.35, 1);
+    transition-delay: 0ms;
+    transition-property: all;
+}
+
+.artist-card-player:hover .track-details{
+    opacity: 1;
+    transition: ease-in-out;
+    transform: translateY(-.55rem);
+    transform-origin: center;
+    transition-duration: 0.6s;
+    transition-timing-function: cubic-bezier(0.64, 0.04, 0.35, 1);
+    transition-delay: 30ms;
+    transition-property: all;
+}
+
+.track-cover{
+    width: 15vh;
+    height: 15vh;
+    background-size: cover;
+    z-index: 100;
+    border-radius: 5px;
+}
+
+/*!* when hovering over artist-tile-player, show track-details *!*/
+/*.artist-card-player:hover ~ .track-details{*/
+/*    opacity: 1;*/
+/*    transition: ease-in-out;*/
+/*    transform: translateY(-.55rem);*/
+/*    transform-origin: center;*/
+/*    transition-duration: 0.6s;*/
+/*    transition-timing-function: cubic-bezier(0.64, 0.04, 0.35, 1);*/
+/*    transition-delay: 3200ms;*/
+/*    transition-property: all;*/
+/*    z-index: 50;*/
+/*}*/
+
+
+
+/*.artist-card-player div{*/
+/*    position: absolute;*/
+/*    scale: 1;*/
+/*    width: 100%;*/
+/*    height: 100%;*/
+/*    border-radius: 9999px;*/
+/*    transition: ease-in-out;*/
+/*    transform-origin: center;*/
+/*    transition-duration: 0.3s;*/
+/*    transition-timing-function: cubic-bezier(0.64, 0.04, 0.35, 1);*/
+/*    transition-delay: 200ms;*/
+/*    transition-property: all;*/
+/*    z-index: 35;*/
+/*  }*/
+
+
+
+/* ANIMATIONS*/
+.artist-card > .artist-card-content li:nth-child(1) h3{
+    opacity:0;
+    transition-delay: 600ms;
+    transform: translateY(500%);
+    transition-duration: 0.4s;
+    transition-timing-function: cubic-bezier(0.4, 0.2, 0.3, 1);
+}
+.artist-card:hover > .artist-card-content li:nth-child(1) h3{
+    opacity:1;
+    transition-delay: 200ms;
+    transform: translateY(0%);
+    transition-duration: 0.6s;
+    transition-timing-function: cubic-bezier(0.4, 0.2, 0.3, 1);
+}
+.artist-card > .artist-card-content li:nth-child(1) p{
+    opacity:0;
+    transition-delay: 500ms;
+    transform: translateY(500%);
+    transition-duration: 0.4s;
+    transition-timing-function: cubic-bezier(0.4, 0.2, 0.3, 1);
+}
+.artist-card:hover > .artist-card-content li:nth-child(1) p{
+    opacity:1;
+    transition-delay: 200ms;
+    transform: translateY(0%);
+    transition-duration: 0.6s;
+    transition-timing-function: cubic-bezier(0.4, 0.2, 0.3, 1);
+}
+
+/* 2nd child*/
+.artist-card > .artist-card-content li:nth-child(2) h3{
+    opacity:0;
+    transition-delay: 600ms;
+    transform: translateY(500%);
+    transition-duration: 0.4s;
+    transition-timing-function: cubic-bezier(0.4, 0.2, 0.3, 1);
+}
+.artist-card:hover > .artist-card-content li:nth-child(2) h3{
+    opacity:1;
+    transition-delay: 200ms;
+    transform: translateY(0%);
+    transition-duration: 0.6s;
+    transition-timing-function: cubic-bezier(0.4, 0.2, 0.3, 1);
+}
+.artist-card > .artist-card-content li:nth-child(2) p{
+    opacity:0;
+    transition-delay: 500ms;
+    transform: translateY(500%);
+    transition-duration: 0.4s;
+    transition-timing-function: cubic-bezier(0.4, 0.2, 0.3, 1);
+}
+.artist-card:hover > .artist-card-content li:nth-child(2) p{
+    opacity:1;
+    transition-delay: 200ms;
+    transform: translateY(0%);
+    transition-duration: 0.6s;
+    transition-timing-function: cubic-bezier(0.4, 0.2, 0.3, 1);
+}
+
+/* 3rd child*/
+.artist-card > .artist-card-content li:nth-child(3) h3{
+    opacity:0;
+    transition-delay: 600ms;
+    transform: translateY(500%);
+    transition-duration: 0.4s;
+    transition-timing-function: cubic-bezier(0.4, 0.2, 0.3, 1);
+}
+.artist-card:hover > .artist-card-content li:nth-child(3) h3{
+    opacity:1;
+    transition-delay: 200ms;
+    transform: translateY(0%);
+    transition-duration: 0.6s;
+    transition-timing-function: cubic-bezier(0.4, 0.2, 0.3, 1);
+}
+.artist-card > .artist-card-content li:nth-child(3) p{
+    opacity:0;
+    transition-delay: 500ms;
+    transform: translateY(500%);
+    transition-duration: 0.4s;
+    transition-timing-function: cubic-bezier(0.4, 0.2, 0.3, 1);
+}
+.artist-card:hover > .artist-card-content li:nth-child(3) p{
+    opacity:1;
+    transition-delay: 200ms;
+    transform: translateY(0%);
+    transition-duration: 0.6s;
+    transition-timing-function: cubic-bezier(0.4, 0.2, 0.3, 1);
+}
+

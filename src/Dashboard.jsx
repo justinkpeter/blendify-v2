@@ -29,14 +29,6 @@ const Sections = ({ children, id }) => {
     )
 }
 
-// const Section = ({ children, id }) => {
-//     return(
-//         <div className={'grid grid-cols-26 grid-rows-10 h-section'}>
-//             {children}
-//         </div>
-//     )
-// }
-
 export const Dashboard = ({children}) => {
 
     const scrollRef = useRef(null)
