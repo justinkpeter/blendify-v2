@@ -31,6 +31,12 @@ const reducer = (state, action) => {
                 ...state,
                 shortTermTopArtists: action.shortTermTopArtists
             }
+        case 'shortTermTopArtistsTopTracks':{
+            return {
+                ...state,
+                shortTermTopArtistsTopTracks: action.shortTermTopArtistsTopTracks
+            }
+        }
         case 'mediumTermTopArtists':
             return {
                 ...state,

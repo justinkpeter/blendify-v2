@@ -7,7 +7,12 @@ import {PlayIcon} from "@heroicons/react/24/solid";
 import { framer, motion } from "framer-motion";
 import { useDataLayerValue } from "./utils/DataLayer";
 import { getTokenFromUrl } from "./auth/spotify";
-import { numberWithCommas, getPopularity, getArtistTopTrack } from "./utils/functions";
+import {numberWithCommas, getPopularity, getArtistTopTrack, getArtistCardId} from "./utils/functions";
+
+import { Modal } from "./components/Modal";
+import { TopArtists } from "./components/TopArtists";
+import {TopArtistsModal} from "./components/Modals/TopArtistsModal";
+
 
 import SpotifyWebApi from "spotify-web-api-js";
 import './styles/ArtistCard.css'
@@ -64,7 +69,7 @@ function App() {
         });
 
         // getting top artists
-        const shortTermTopArtists = await spotify.getMyTopArtists({time_range: 'short_term', limit: 10}).then((response) => {return response.items})
+        const shortTermTopArtists = await spotify.getMyTopArtists({time_range: 'short_term', limit: 50}).then((response) => {return response.items})
         const mediumTermTopArtists = await spotify.getMyTopArtists({time_range: 'medium_term', limit: 10}).then((response) => {return response.items})
         const longTermTopArtists = await spotify.getMyTopArtists({time_range: 'long_term', limit: 10}).then((response) => {return response.items})
 
@@ -75,7 +80,7 @@ function App() {
         const shortTermTopArtistsTopTracks = await Promise.all(shortTermTopArtists.map(async (artist) => {
             await spotify.getArtistTopTracks(artist.id, 'US').then((response) => {
                 artist.tracks = response.tracks
-                console.log({artist, response})
+                // console.log({artist, response})
             });
             return artist
         }))
@@ -135,155 +140,130 @@ function App() {
         )
     }
 
-    const TopArtist = ({children}) => {
+    const TopArtist = ({children, id}) => {
         return(
-            <div className={'relative grid grid-cols-4  row-[3_/_span_5] col-[10_/_span_4] '}>
+            <div className={'relative grid grid-cols-4  row-[3_/_span_5] col-[10_/_span_4]'} id={id}>
                 {children}
             </div>
         )
     }
 
-    const TopArtistCard = ({img, artist, children}) => {
-        const [{ token,  shortTermTopArtists, shortTermTopArtistsTopTracks }, dispatch ] = useDataLayerValue();
-        const topArtist = shortTermTopArtists[0]
-        const topTrack = "https://p.scdn.co/mp3-preview/a959b7872181a589248ed17ecde94904bd307c5c?cid=b136039c2bad4a978b33db20e143a30a"
-
-
-        const [time, setTime] = useState(0)
-        const [duration, setDuration] = useState(0)
-        const [playTime, setPlayTime] = useState(0)
-
-
-        function playTrack() {
-            const audio = document.getElementById('myAudio')
-            setDuration(audio.duration)
-            audio.volume = 0;
-            audio.play();
-            const fade = setInterval(() => {
-                if (audio.volume < 0.99) {
-                    audio.volume += 0.01;
-                } else {
-                    clearInterval(fade);
-                }
-            }, 50);
-
-        }
-
-        function pauseTrack() {
-            const audio = document.getElementById('myAudio')
-            const fade = setInterval(() => {
-                if (audio.volume > 0.01) {
-                    audio.volume -= 0.01;
-                } else {
-                    clearInterval(fade);
-                    audio.pause();
-                }
-            })
-        }
-
-
-        function getPlaybackTime() {
-            const audio = document.getElementById('myAudio')
-            if(audio){
-                // get audio current time
-                setTime(audio.currentTime)
-                // get audio duration
-                setDuration(audio.duration)
-                // set audio play time
-                setPlayTime(audio.currentTime / audio.duration * 100)
-            }
-
-        }
-
-         const AudioToggle = () => {
-            return (
-                <div className={"music"}>
-                    <div className={"bar"}></div>
-                    <div className={"bar"}></div>
-                    <div className={"bar"}></div>
-                    <div className={"bar"}></div>
-                </div>
-            )
-        }
+    const Artist = ({children}) => {
 
         return(
-            <div className={'artist-card'} onMouseEnter={() => playTrack()} onMouseLeave={() => pauseTrack()}>
-                <div className={'artist-card-title'}>
-                    <span className={'text-lg font-normal'}> Your Top Artist </span>
-                    <span className={'text-xl 2xl:text-3xl font-bold'}> {topArtist?.name} </span>
+            <>
+                <div>
+                    {children}
                 </div>
-                <img src={topArtist?.images[0].url} alt={topArtist?.name} className={'artist-card-image'}/>
-                <div className={'artist-card-image-overlay'}/>
-                <div className={'artist-card-content'}>
-                    <ul className={'font-medium w-2/3 overflow-hidden space-y-3.5'}>
-                        <li>
-                            <h3 className={'text-base font-light'}> Popularity </h3>
-                            <p className={'text-2xl font-bold'}> {getPopularity(topArtist?.popularity)} </p>
-                        </li>
-                        <li>
-                            <h3 className={'text-base font-light'}> Followers </h3>
-                            <p className={'text-2xl font-bold'}> { numberWithCommas(topArtist?.followers?.total)}</p>
-                        </li>
-                        <li>
-                            <h3 className={'text-base font-light'}> Top Track </h3>
-                            <p className={'text-2xl font-bold'}> {'placeholder'} </p>
-                        </li>
-                    </ul>
-                </div>
-                <div className={'artist-card-player'} >
-
-                    {/* container */}
-                    <div className={'w-full h-full rounded-full '}>
-                        <div className={'backdrop'}/>
-                        <div className={'absolute top-2 left-2.5'}>
-                            <PlayIcon className={"w-6 h-6 icon "}/>
-                        </div>
-                    </div>
-
-                    <div className={'track-details'}>
-                        <div className={'track-cover'} style={{backgroundImage: `url(${topArtist?.images[0].url})`}}/>
-                        <div className={'mt-1 rounded-full w-full h-1 bg-gray-200'}>
-                            <div style={{width: `${playTime}%`}} className={'w-1/2 rounded-full h-1 bg-green-500'}/>
-                        </div>
-                        <h4 className={'font-bold lg:text-lg text-right overflow-hidden'}>
-                            <span className={'mt-3 flex flex-col justify-center'}>
-                               A Track name
-                            </span>
-                        </h4>
-                        <audio id="myAudio" preload="none" src={topTrack} onTimeUpdate={() => getPlaybackTime()}></audio>
-                    </div>
-                </div>
-            </div>
+            </>
         )
     }
 
-
   const [{shortTermTopArtists, shortTermTopArtistsTopTracks } ] = useDataLayerValue();
   const topArtist = shortTermTopArtists[0]
+
   return (
     <div>
         <Navbar/>
+        <TopArtistsModal artists={shortTermTopArtists}/>
         { !token ? <Login/> :
             <Dashboard>
                 <Section>
                     <SectionSummary/>
-                    <TopArtist>
+                    <TopArtist id={getArtistCardId(topArtist?.name)}>
                         <ArtistCard>
                             <ArtistCardTitle name={topArtist?.name}/>
-                            <ArtistCardImage image={topArtist?.images[0].url}/>
+                            <ArtistCardImage image={topArtist?.images[0].url} large/>
                             <ArtistCardImageOverlay/>
                             <ArtistCardContent
                                 popularity={topArtist?.popularity}
                                 followers={topArtist?.followers.total}
                                 topTrack={topArtist?.top_track.name} />
                             <ArtistCardTrackPreview topTrack={topArtist?.top_track}/>
-
                         </ArtistCard>
-
-                        {/*<TopArtistCard/>*/}
                     </TopArtist>
 
-                    {/*<div className={'col-[10_/_span_4] row-[3_/_span_4] bg-blue-500'}>2</div>*/}
+
+                    <div className={'relative col-[15_/_span_3] row-[4_/_span_3]'}>
+                        <ArtistCard>
+                            <ArtistCardTitle rank={2} name={shortTermTopArtists[1]?.name}/>
+                            <ArtistCardImage image={shortTermTopArtists[1]?.images[1].url}/>
+                            <ArtistCardImageOverlay/>
+                            <ArtistCardContent topTrack={shortTermTopArtists[1]?.top_track.name}/>
+                            <ArtistCardTrackPreview topTrack={shortTermTopArtists[1]?.top_track}/>
+                        </ArtistCard>
+                    </div>
+
+                    <div className={'relative col-[18_/_span_3] row-[7_/_span_3]'}>
+                        <ArtistCard>
+                            <ArtistCardTitle rank={3} name={shortTermTopArtists[2]?.name}/>
+                            <ArtistCardImage image={shortTermTopArtists[2]?.images[1].url}/>
+                            <ArtistCardImageOverlay/>
+                            <ArtistCardContent topTrack={shortTermTopArtists[2]?.top_track.name}/>
+                            <ArtistCardTrackPreview topTrack={shortTermTopArtists[2]?.top_track}/>
+                        </ArtistCard>
+                    </div>
+
+                    <div className={'relative col-[19_/_span_3] row-[3_/_span_3]'}>
+                        <ArtistCard>
+                            <ArtistCardTitle rank={4} name={shortTermTopArtists[3]?.name}/>
+                            <ArtistCardImage image={shortTermTopArtists[3]?.images[1].url}/>
+                            <ArtistCardImageOverlay/>
+                            <ArtistCardContent topTrack={shortTermTopArtists[3]?.top_track.name}/>
+                            <ArtistCardTrackPreview topTrack={shortTermTopArtists[3]?.top_track}/>
+                        </ArtistCard>
+                    </div>
+
+                    <div className={'relative col-[23_/_span_3] row-[2_/_span_3]'}>
+                        <ArtistCard>
+                            <ArtistCardTitle rank={5} name={shortTermTopArtists[4]?.name}/>
+                            <ArtistCardImage image={shortTermTopArtists[4]?.images[1].url}/>
+                            <ArtistCardImageOverlay/>
+                            <ArtistCardContent topTrack={shortTermTopArtists[4]?.top_track.name}/>
+                            <ArtistCardTrackPreview topTrack={shortTermTopArtists[4]?.top_track}/>
+                        </ArtistCard>
+                    </div>
+
+                    <div className={'relative col-[22_/span_4] row-[7_/_span_2]  bg-gradient-to-l from-green-500 rounded-xl '}>
+                        <div className={'absolute inset-0 z-20 flex items-center overflow-hidden'}>
+                            <div className={'absolute left-0 w-[30vh] h-[30vh]'}>
+                                <div
+                                    style={{backgroundImage: `url(${shortTermTopArtists[0]?.images[0].url})`}}
+                                    className={'absolute w-full h-full opacity-20 bg-cover bg-center origin-left'}>
+                                </div>
+                                <div
+                                    style={{backgroundImage: `url(${shortTermTopArtists[1]?.images[0].url})`}}
+                                    className={'absolute w-full h-full opacity-20 bg-cover bg-center origin-left'}>
+                                </div>
+                                <div
+                                    style={{backgroundImage: `url(${shortTermTopArtists[2]?.images[0].url})`}}
+                                    className={'absolute w-full h-full opacity-20 bg-cover bg-center origin-left'}>
+                                </div>
+                                <div
+                                    style={{backgroundImage: `url(${shortTermTopArtists[3]?.images[0].url})`}}
+                                    className={'absolute w-full h-full opacity-20 bg-cover bg-center origin-left'}>
+                                </div>
+
+                            </div>
+                            <div className={'h-full w-[30vh] h-[30vh] basis-[30vh] z-10 inline-flex flex-col justify-center pr-6 pb-2.5 pl-9 text-white'}>
+                                <h4 className={'pl-2 text-base font-medium'}> Suggestion Playlist</h4>
+                                <p  className={'pl-2 mt-1.5 text-2xl font-medium'}> A fresh playlist, just for you.</p>
+                            </div>
+                            <span className="flex h-3 w-3">
+                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+                              <span className="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div className={'group relative col-[26_/_span_1] row-[5_/_span_1] bg-zinc-500/40  flex justify-center items-center rounded-xl text-white'}>
+                        {/*<label htmlFor="my-modal-3" className="btn">open modal</label>*/}
+                        <TopArtists/>
+
+
+                        {/*<span > 50 </span>*/}
+                    </div>
+
                 </Section>
             </Dashboard>
         }

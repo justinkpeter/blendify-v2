@@ -3,6 +3,11 @@ export function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
+export function getArtistCardId(name) {
+    if(name === undefined) return 0;
+    return name.replace(/\s/g, '-').toLowerCase()
+}
+
 export function getPopularity(popularity) {
     if (popularity < 20) {
         return "Underground"
