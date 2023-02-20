@@ -13,6 +13,14 @@ import { Modal } from "./components/Modal";
 import { TopArtists } from "./components/TopArtists";
 import {TopArtistsModal} from "./components/Modals/TopArtistsModal";
 
+import {
+    TopTrackTile,
+    TopTrackCard,
+    TopTrackInfo,
+    TopTrackRank,
+    TopTrackImage
+} from "./components/TopTracks/TopTrackTile";
+
 
 import SpotifyWebApi from "spotify-web-api-js";
 import './styles/ArtistCard.css'
@@ -53,6 +61,21 @@ function App() {
         })
     }
 
+    const dispatchFavoriteTracks = async (shortTermTopTracks, mediumTermTopTracks, longTermTopTracks) => {
+        dispatch({
+            type: 'shortTermTopTracks',
+            shortTermTopTracks: shortTermTopTracks
+        })
+        dispatch({
+            type: 'mediumTermTopTracks',
+            mediumTermTopTracks: mediumTermTopTracks
+        })
+        dispatch({
+            type: 'longTermTopTracks',
+            longTermTopTracks: longTermTopTracks
+        })
+    }
+
     // a function that gets the token from the url and updates the data layer
     const getSpotifyData = async (token) => {
         dispatch({
@@ -72,6 +95,23 @@ function App() {
         const shortTermTopArtists = await spotify.getMyTopArtists({time_range: 'short_term', limit: 50}).then((response) => {return response.items})
         const mediumTermTopArtists = await spotify.getMyTopArtists({time_range: 'medium_term', limit: 10}).then((response) => {return response.items})
         const longTermTopArtists = await spotify.getMyTopArtists({time_range: 'long_term', limit: 10}).then((response) => {return response.items})
+
+
+        // getting user most played tracks
+        const shortTermTopTracks = await spotify.getMyTopTracks({ time_range: "short_term", limit: 50}).then((response) => {return response.items})
+        const mediumTermTopTracks = await spotify.getMyTopTracks({ time_range: "medium_term", limit: 50}).then((response) => {return response.items})
+        const longTermTopTracks = await spotify.getMyTopTracks({ time_range: "long_term", limit: 50}).then((response) => {return response.items})
+
+
+        // getting user top genres,
+        // loop thru each artist and get the genres
+        // then loop thru each genre and add it to the genres array
+        const shortTermTopGenres = []
+        const mediumTermTopGenres = []
+        const longTermTopGenres = []
+
+
+
 
         //getting individual artists top tracks
         let artistsTopTracks = []
@@ -95,10 +135,11 @@ function App() {
         })
 
 
-        console.log({shortTermTopArtists, shortTermTopArtistsTopTracks})
+        console.log({shortTermTopArtists, shortTermTopTracks})
 
         await dispatchTopArtists(shortTermTopArtists, mediumTermTopArtists, longTermTopArtists)
         await dispatchTopTracks(shortTermTopArtistsTopTracks)
+        await dispatchFavoriteTracks(shortTermTopTracks, mediumTermTopTracks, longTermTopTracks)
 
     }
 
@@ -117,7 +158,7 @@ function App() {
 
 
     const SectionSummary = () => {
-        const [{ shortTermTopArtists, mediumTermTopArtists, longTermTopArtists }, dispatch ] = useDataLayerValue();
+        const [{ shortTermTopArtists, shortTermTopTracks }, dispatch ] = useDataLayerValue();
         const topArtist = shortTermTopArtists[0]
         return(
             <div className={'relative grid grid-cols-7 col-[3_/_span_7] row-[4_/_span_6]  z-20'}>
@@ -159,7 +200,7 @@ function App() {
         )
     }
 
-  const [{shortTermTopArtists, shortTermTopArtistsTopTracks } ] = useDataLayerValue();
+  const [{shortTermTopArtists, shortTermTopTracks } ] = useDataLayerValue();
   const topArtist = shortTermTopArtists[0]
 
   return (
@@ -265,6 +306,175 @@ function App() {
                     </div>
 
                 </Section>
+
+                <Section topTracks>
+                    <div className={'relative grid grid-cols-7 col-[3_/_span_7] row-[4_/_span_6]  z-20'}>
+                        <div className={'absolute top-0 left-0 leading-6'}>
+                            <h1 className={'my-5 font-black text-6xl 2xl:text-7xl text-white'}>
+                                <span className={'inline-block xl:pr-[5vh]'}>
+                                    {/*<span> Grooving to </span><br/>*/}
+                                    <span className={'break-normal text-green-400'}> {topArtist?.name} </span>
+                                    <br/>
+                                    <span> has been on repeat </span><br/>
+                                 </span>
+                            </h1>
+                            <p className={'font-light text-xl text-gray-100 pr-[10vh]'}>
+                                <span className={'inline-block leading-loose'}>
+                                    Yeah, you have other songs you like to bump, but {shortTermTopTracks[0]?.name} by {shortTermTopTracks[0]?.artists[0]?.name} truly hit some chords with you.
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <TopTrackTile>
+                        <TopTrackCard>
+                            <TopTrackRank rank={1}/>
+                            <TopTrackImage>
+                                <div
+                                    style={{backgroundImage: `url(${shortTermTopTracks[0]?.album?.images[0]?.url})`}}
+                                    className={'absolute h-full w-full bg-cover bg-center'}>
+                                </div>
+                            </TopTrackImage>
+                            <TopTrackInfo>
+                                <h2 className={'font-bold truncate text-ellipsis lg:text-2xl 2xl:text-4xl whitespace-nowrap'}>
+                                    {shortTermTopTracks[0]?.name}
+                                </h2>
+                                <h3 className={'text-gray-400'}>
+                                    <span className={''}> {shortTermTopTracks[0]?.artists[0]?.name}</span>
+                                    <span>, </span>
+                                    <span> {shortTermTopTracks[0]?.artists[1]?.name}</span>
+                                </h3>
+                            </TopTrackInfo>
+                        </TopTrackCard>
+                    </TopTrackTile>
+
+                    <TopTrackTile col={17} row={4}>
+                        <TopTrackCard>
+                            <TopTrackRank rank={2}/>
+                            <TopTrackImage small>
+                                <div
+                                    style={{backgroundImage: `url(${shortTermTopTracks[1]?.album?.images[0]?.url})`}}
+                                    className={'absolute h-full w-full bg-cover bg-center'}>
+                                </div>
+                            </TopTrackImage>
+                            <TopTrackInfo>
+                                <h2 className={'font-bold truncate text-ellipsis lg:text-2xl 2xl:text-4xl whitespace-nowrap'}>
+                                    {shortTermTopTracks[1]?.name}
+                                </h2>
+                                <h3 className={'text-gray-400'}>
+                                    <span className={''}> {shortTermTopTracks[1]?.artists[0]?.name}</span>
+                                    <span>, </span>
+                                    <span> {shortTermTopTracks[1]?.artists[1]?.name}</span>
+                                </h3>
+                            </TopTrackInfo>
+                        </TopTrackCard>
+                    </TopTrackTile>
+
+                    {/* top track #2 */}
+                    <TopTrackTile col={21} row={3}>
+                        <TopTrackCard>
+                            <TopTrackRank rank={3}/>
+                            <TopTrackImage small>
+                                <div
+                                    style={{backgroundImage: `url(${shortTermTopTracks[2]?.album?.images[0]?.url})`}}
+                                    className={'absolute h-full w-full bg-cover bg-center'}>
+                                </div>
+                            </TopTrackImage>
+                            <TopTrackInfo>
+                                <h2 className={'font-bold truncate text-ellipsis lg:text-2xl 2xl:text-4xl whitespace-nowrap'}>
+                                    {shortTermTopTracks[2]?.name}
+                                </h2>
+                                <h3 className={'text-gray-200'}>
+                                    <span className={''}> {shortTermTopTracks[2]?.artists[0]?.name}</span>
+                                    <span>, </span>
+                                    <span> {shortTermTopTracks[2]?.artists[1]?.name}</span>
+                                </h3>
+                            </TopTrackInfo>
+                        </TopTrackCard>
+                    </TopTrackTile>
+
+                    {/* top track #2 */}
+                    <div className={'grid relative row-[3_/_span_3] col-[21_/_span_3]'}>
+                        <TopTrackCard>
+                            <TopTrackRank rank={3}/>
+                            <TopTrackImage small>
+                                <div
+                                    style={{backgroundImage: `url(${shortTermTopTracks[2]?.album?.images[0]?.url})`}}
+                                    className={'absolute h-full w-full bg-cover bg-center'}>
+                                </div>
+                            </TopTrackImage>
+                            <TopTrackInfo>
+                                <h2 className={'font-bold truncate text-ellipsis lg:text-2xl 2xl:text-4xl whitespace-nowrap'}>
+                                    {shortTermTopTracks[2]?.name}
+                                </h2>
+                                <h3 className={'text-gray-200'}>
+                                    <span className={''}> {shortTermTopTracks[2]?.artists[0]?.name}</span>
+                                    <span>, </span>
+                                    <span> {shortTermTopTracks[2]?.artists[1]?.name}</span>
+                                </h3>
+                            </TopTrackInfo>
+                        </TopTrackCard>
+                    </div>
+
+                    {/*top track 4*/}
+                    <div className={'grid relative row-[2_/_span_3] col-[25_/_span_3]'}>
+                        <TopTrackCard>
+                            <TopTrackRank rank={4}/>
+                            <TopTrackImage small>
+                                <div
+                                    style={{backgroundImage: `url(${shortTermTopTracks[3]?.album?.images[0]?.url})`}}
+                                    className={'absolute h-full w-full bg-cover bg-center'}>
+                                </div>
+                            </TopTrackImage>
+
+                            <TopTrackInfo>
+                                <h2 className={'font-bold truncate text-ellipsis lg:text-2xl 2xl:text-4xl whitespace-nowrap'}>
+                                    {shortTermTopTracks[4]?.name}
+                                </h2>
+                                <h3 className={'text-gray-200'}>
+                                    <span className={''}> {shortTermTopTracks[3]?.artists[0]?.name}</span>
+                                    <span>, </span>
+                                    <span> {shortTermTopTracks[3]?.artists[1]?.name}</span>
+                                </h3>
+                            </TopTrackInfo>
+                        </TopTrackCard>
+                    </div>
+
+                    {/*top track 5*/}
+                    <div className={'grid relative row-[4_/_span_3] col-[29_/_span_3]'}>
+                        <TopTrackCard>
+                            <TopTrackRank rank={5}/>
+                            <TopTrackImage small>
+                                <div
+                                    style={{backgroundImage: `url(${shortTermTopTracks[4]?.album?.images[0]?.url})`}}
+                                    className={'absolute h-full w-full bg-cover bg-center'}>
+                                </div>
+                            </TopTrackImage>
+
+                            <TopTrackInfo>
+                                <h2 className={'font-bold truncate text-ellipsis lg:text-2xl 2xl:text-4xl whitespace-nowrap'}>
+                                    {shortTermTopTracks[3]?.name}
+                                </h2>
+                                <h3 className={'text-gray-200'}>
+                                    <span className={''}> {shortTermTopTracks[4]?.artists[0]?.name}</span>
+                                    <span>, </span>
+                                    <span> {shortTermTopTracks[4]?.artists[1]?.name}</span>
+                                </h3>
+                            </TopTrackInfo>
+                        </TopTrackCard>
+                    </div>
+
+                    {/* top 50 */}
+                    <div className={'group relative col-[30_/_span_1] row-[8_/_span_1] bg-zinc-500/40  flex justify-center items-center rounded-xl text-white'}>
+                        {/*<label htmlFor="my-modal-3" className="btn">open modal</label>*/}
+                        <TopArtists/>
+
+                    </div>
+
+
+                </Section>
+
             </Dashboard>
         }
     </div>

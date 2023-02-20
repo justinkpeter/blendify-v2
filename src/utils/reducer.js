@@ -11,6 +11,8 @@ export const initialState = {
     mediumTermTopArtists: [],
     longTermTopTracks: [],
     longTermTopArtists: [],
+
+
 }
 const reducer = (state, action) => {
     //Action -> type, [payload]
@@ -26,6 +28,21 @@ const reducer = (state, action) => {
                 ...state,
                 token: action.token
             }
+            case 'shortTermTopTracks':
+                return{
+                    ...state,
+                    shortTermTopTracks: action.shortTermTopTracks
+                }
+        case 'mediumTermTopTracks':
+            return{
+                ...state,
+                mediumTermTopTracks: action.mediumTermTopTracks
+            }
+            case 'longTermTopTracks':
+                return{
+                    ...state,
+                    longTermTopTracks: action.longTermTopTracks
+                }
         case 'shortTermTopArtists':
             return {
                 ...state,

@@ -22,7 +22,7 @@ export const TopArtistsModal = ({artists}) => {
 
 
         document.addEventListener("scroll", (e) => {
-            console.log(scrollYProgress.get())
+            // console.log(scrollYProgress.get())
         });
     })
 

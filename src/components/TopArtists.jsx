@@ -1,9 +1,5 @@
 export const TopArtists = () => {
 
-
-
-
-
     return (
         <>
             <div className={'relative btn h-full w-full'}>
