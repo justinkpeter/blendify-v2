@@ -2,14 +2,13 @@ import React from 'react';
 import LinkIcon from '@mui/icons-material/Link';
 import ShareIcon from '@mui/icons-material/Share';
 
-
-
+import { ProgressPill } from "./ProgressPill";
 
 
 const IconButton = ({icon, label, text}) => {
     return (
         <div className='dropdown'>
-            <label tabIndex={0} className={"btn btn-ghost rounded-full m-1 flex gap-1 text-sm focus:bg-green-500/30 focus:text-green-500 "}>
+            <label tabIndex={0} className={"btn btn-ghost rounded-full m-1 flex gap-1 text-sm focus:bg-green-500/30 focus:text-green-500 normal-case "}>
                 {icon}
                 {label}
             </label>
@@ -55,15 +54,34 @@ const IconButton = ({icon, label, text}) => {
 }
 
 
-export const Navbar = () => {
+const ProfileButton = ({user}) => {
+    return(
+        <>
+            <div className={'navbar-end'}>
+                <label> { user?.display_name } </label>
+                <label className="avatar pl-4">
+                    <div className="w-10 rounded-full">
+                        <img src={user?.images[0].url}/>
+                    </div>
+                </label>
+
+            </div>
+        </>
+    )
+}
+
+
+export const Navbar = ({user}) => {
     return (
         <>
-            <div className='navbar text-white fixed z-50'>
+            <div className='navbar text-white fixed z-50 px-10 '>
                 <div className='navbar-start'>
-                    <a className='btn btn-ghost normal-case text-xl'>blendify</a>
-                    <IconButton icon={<LinkIcon/>} label={'about'} text={'some text '}/>
-
+                    <a className='btn btn-ghost normal-case text-md'>blendify</a>
+                    <IconButton icon={<LinkIcon/>} label={'About'} text={'some text '}/>
+                    <IconButton icon={<ShareIcon/>} label={'Share'} text={'some text '}/>
                 </div>
+                <ProgressPill/>
+                <ProfileButton user={user}/>
             </div>
         </>
     );
