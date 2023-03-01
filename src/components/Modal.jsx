@@ -1,19 +1,8 @@
-import {useEffect, useState} from "react";
 import { ModalNav } from "./Modals/ModalNav";
-import {getPopularity, numberWithCommas} from "../utils/functions";
-
-import { ListItems } from "./Modals/ListItems";
-import { ListCard } from "./Modals/ListCard";
-
-import { ArrowLongLeftIcon } from "@heroicons/react/24/solid";
-import { ArrowLongRightIcon } from "@heroicons/react/24/solid";
-import { HeartIcon, StarIcon, UserIcon } from "@heroicons/react/20/solid";
-
-import { QuickStat } from "../components/QuickStat"
-
-
+import { HeartIcon, StarIcon, MusicalNoteIcon, ChevronDoubleUpIcon } from "@heroicons/react/20/solid";
+import { QuickStat } from "./QuickStat"
 import { Carousel } from "./Carousel";
-
+import '../styles/Modal.css'
 
 const GenrePill = ({genre}) => {
     return(
@@ -22,33 +11,29 @@ const GenrePill = ({genre}) => {
         </>
     )
 }
-export const Modal = ({children, id, artist}) => {
+export const Modal = ({ id, artist}) => {
 
     return(
         <>
             <input type="checkbox" id={id} className="modal-toggle" />
             <div className="modal">
-                <div className="modal-box rounded-3xl max-w-6xl max-h-[85vh] relative px-20 bg-zinc-900 min-h-[20vh] ">
+                <div className="modal-box rounded-3xl max-w-6xl max-h-[85vh] relative px-14 bg-zinc-900 min-h-[20vh] py-0">
                     <ModalNav id={id}/>
-
-                    <div className={'h-[70vh] w-full relative '}>
-                        <div className={'relative flex w-full h-full overflow-y-scroll gap-[70px]'}>
-
+                    <div className={'h-[70vh] w-full relative modal-content'}  >
+                        <div  id={'scrollable'} className={'relative flex w-full h-full overflow-y-scroll gap-[70px] scroll-smooth '} >
                             {/*image */}
                             <div className={'w-fit h-full sticky top-0'}>
                                 <div className={'h-fit'}>
                                     <div className={'relative overflow-hidden w-[306px] h-[306px] '}>
                                         { artist ? <div className={'w-full h-full bg-cover rounded-2xl'} style={{backgroundImage: `url(${artist?.images[0].url})`}}>
-
                                         </div> : '' }
                                     </div>
                                     <div className={'btn btn-wide'}> oops</div>
                                 </div>
                             </div>
-
                             {/* content*/}
-                            <div className={'w-full max-w-[576px] h-[120vh] '}>
-                                <div className={'text-white min-w-[576px] height-[80vh] overflow-y-scroll '}>
+                            <div className={'w-full max-w-[576px] h-fit'}>
+                                <div className={'text-white min-w-[576px] height-[80vh]  overflow-y-scroll'} >
                                     {/* name*/}
                                     <h1 className={'text-6xl font-black mb-7'}>
                                         <span className={'inline-block'}>
@@ -64,29 +49,35 @@ export const Modal = ({children, id, artist}) => {
                                         })}
                                     </div>
                                     {/* popularity & followers */}
-                                    <div className={'flex gap-1.5 mb-[25px]'}>
+                                    <div className={'flex mb-[25px]'}>
                                         <QuickStat title={'Popularity'} value={artist?.popularity} Icon={StarIcon}/>
                                         <QuickStat title={'Followers'} value={artist?.followers.total} Icon={HeartIcon}/>
-                                        {/*<TitleCard title={'Popularity'} value={artist?.popularity}/>*/}
-                                        {/*<TitleCard title={'Followers'} value={artist?.followers.total}/>*/}
                                     </div>
                                     {/* top tracks*/}
                                     <div>
                                         <Carousel title={'Top Tracks'} id={'top-tracks-carousel'}  items={artist?.tracks.slice(0,6)} numbers={true}/>
+                                        <div className={'flex'}>
+                                            <QuickStat title={'Discography'} value={artist?.related_releases} Icon={MusicalNoteIcon}/>
+                                            <QuickStat title={'Latest Release'} value={artist?.related_releases[0].release_date} Icon={ChevronDoubleUpIcon}/>
+                                        </div>
                                     </div>
-
                                     {/* related artists */}
                                     <div>
                                         <Carousel title={'Related Artists'} id={'related-artists-carousel'}  items={artist?.related_artists.slice(0,6)} numbers={false}/>
-
                                     </div>
-
                                 </div>
                             </div>
-
                         </div>
                     </div>
 
+                    {/* scroll bar */}
+                    {/*<div className={'absolute right-14 top-36 bg-gray-400/40 w-0.5 h-[50vh]'}>*/}
+                    {/*    <motion.div className={' relative w-full h-[30vh] bg-green-500'}>*/}
+
+                    {/*    </motion.div>*/}
+                    {/*</div>*/}
+
+                    {/*<ScrollBar position={scrollPosition}/>*/}
                 </div>
             </div>
         </>

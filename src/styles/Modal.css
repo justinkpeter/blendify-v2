@@ -1,3 +1,45 @@
-::-webkit-scrollbar {
-    display: none;
+/*::-webkit-scrollbar .modal {*/
+/*    !*display: none;*!*/
+/*    background-color: #18181b;*/
+/*}*/
+
+/*::-webkit-scrollbar-thumb .modal{*/
+/*    height: 45%;*/
+/*    background: #72d81e;*/
+/*}*/
+
+/*::-webkit-scrollbar-track .modal{*/
+/*    background: #b53535;*/
+/*}*/
+
+
+
+/* modify the scroll bar in modal-content class*/
+
+
+
+#scrollable::-webkit-scrollbar {
+    /* position*/
+    width: 0.1rem;
+    height: 10em;
+    /*background-color: rgba(245, 245, 245, 0.24);*/
+
+/*     padding */
+
 }
+
+#scrollable::-webkit-scrollbar-track {
+    /* position*/
+    /*height: 10vh;*/
+    background-color: rgba(245, 245, 245, 0.24);
+    margin: 8vh;
+
+    /*border-radius: 0.5rem;*/
+}
+
+#scrollable::-webkit-scrollbar-thumb {
+    /* position*/
+    background-color: #22c55e;
+    border-radius: 0.5rem;
+}
+
