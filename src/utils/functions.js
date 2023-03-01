@@ -119,3 +119,7 @@ const handleScroll = () => {
     return (scrollPercent * 100);
 
 }
+
+export function getScrollPercentage(){
+    return ((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100)
+}
