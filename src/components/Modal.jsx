@@ -20,22 +20,24 @@ export const Modal = ({ id, artist}) => {
                 <div className="modal-box rounded-3xl max-w-6xl max-h-[85vh] relative px-14 bg-zinc-900 min-h-[20vh] py-0">
                     <ModalNav id={id}/>
                     <div className={'h-[70vh] w-full relative modal-content'}  >
-                        <div  id={'scrollable'} className={'relative flex w-full h-full overflow-y-scroll gap-[70px] scroll-smooth '} >
+                        <div  id={'scrollable'} className={'relative flex w-full h-full overflow-y-scroll gap-[70px] scroll-smooth mt-[5vh]'} >
                             {/*image */}
-                            <div className={'w-fit h-full sticky top-0'}>
+                            <div className={'w-fit h-fit sticky top-0'}>
                                 <div className={'h-fit'}>
                                     <div className={'relative overflow-hidden w-[306px] h-[306px] '}>
                                         { artist ? <div className={'w-full h-full bg-cover rounded-2xl'} style={{backgroundImage: `url(${artist?.images[0].url})`}}>
                                         </div> : '' }
                                     </div>
-                                    <div className={'btn btn-wide'}> oops</div>
+                                    <a className={'btn hover:bg-green-800 w-full mt-5 bg-green-500 text-white border-0 normal-case'} href={`spotify:artist:${artist?.id}`} target={"_blank"}>
+                                        <span> Open in Spotify</span>
+                                    </a>
                                 </div>
                             </div>
                             {/* content*/}
                             <div className={'w-full max-w-[576px] h-fit'}>
                                 <div className={'text-white min-w-[576px] height-[80vh]  overflow-y-scroll'} >
                                     {/* name*/}
-                                    <h1 className={'text-6xl font-black mb-7'}>
+                                    <h1 className={'text-6xl font-black mt-3 mb-7'}>
                                         <span className={'inline-block'}>
                                             {artist?.name}
                                         </span>
@@ -69,15 +71,6 @@ export const Modal = ({ id, artist}) => {
                             </div>
                         </div>
                     </div>
-
-                    {/* scroll bar */}
-                    {/*<div className={'absolute right-14 top-36 bg-gray-400/40 w-0.5 h-[50vh]'}>*/}
-                    {/*    <motion.div className={' relative w-full h-[30vh] bg-green-500'}>*/}
-
-                    {/*    </motion.div>*/}
-                    {/*</div>*/}
-
-                    {/*<ScrollBar position={scrollPosition}/>*/}
                 </div>
             </div>
         </>
