@@ -27,6 +27,7 @@ import {Carousel} from "./components/Carousel";
 import {numberWithCommas} from "./utils/functions";
 import {FavoriteArtists} from "./components/Sections/FavoriteArtists";
 import {FavoriteTracks} from "./components/Sections/FavoriteTracks";
+import {FavoriteGenres} from "./components/Sections/FavoriteGenres";
 
 const spotify = new SpotifyWebApi();
 
@@ -397,153 +398,124 @@ function App() {
         { !token ? <Login/> :
             <Dashboard>
                 <Loading isLoading={isLoaded} user={user}/>
-                { isLoaded && <FavoriteArtists favoriteArtists={shortTermTopArtists} onUpdateData={handleUpdateData}/> }
-                { isLoaded && <FavoriteTracks favoriteTracks={shortTermTopTracks} onUpdateData={handleUpdateData}/> }
-
-                <Section topGenres>
-                    <div className={'relative grid grid-cols-7 col-[1_/_span_7] row-[4_/_span_6]  z-20'}>
-                        <div className={'absolute top-0 left-0 leading-6'}>
-                            <h1 className={'my-5 font-black text-6xl 2xl:text-7xl text-white'}>
-                                <span className={'inline-block xl:pr-[5vh]'}>
-                                    <span> {topGenres[0]?.name} </span><br/>
-                                    <span className={'break-normal text-green-400'}> is truly undefeated. </span>
-                                    <br/>
-                                    {/*<span> has been on repeat </span><br/>*/}
-                                 </span>
-                            </h1>
-                            <p className={'font-light text-xl text-gray-100 pr-[10vh]'}>
-                                <span className={'inline-block leading-loose'}>
-                                   Looks like you're a <span className={'italic'}> huge </span>
-                                    {topGenres[0]?.name} fan! This genre appears in {topGenres[0]?.percentage}%
-                                    of your top tracks played in the last 4 weeks.
-
-                                </span>
-                            </p>
-                        </div>
-                    </div>
-
-                    <TopGenres topGenres={topGenres}/>
-
-                </Section>
-                <Section streamingAnalysis>
-
-                    <div className={'relative grid grid-cols-7 col-[4_/_span_7] row-[4_/_span_6]  z-20'}>
-                        <div className={'absolute top-0 left-0 leading-6'}>
-                            <h1 className={'my-5 font-black text-6xl 2xl:text-7xl text-white'}>
-                                <span className={'inline-block xl:pr-[5vh]'}>
-                                    <span> {user?.display_name.split(" ")[0] }, </span><br/>
-                                    <span className={'break-normal text-green-400'}> all your tastes, blended into one </span>
-                                    <br/>
-
-                                    {/*<span> has been on repeat </span><br/>*/}
-                                    </span>
-                            </h1>
-                            <p className={'font-light text-xl text-gray-100 '}>
-                                <span className={'inline-block leading-loose'}>
-                                    Just an overall <span className={'italic'}> vibe </span> of your music taste.
-                                    <span className={'italic'}> Keep grooving. </span>
-                                </span>
-                            </p>
-                        </div>
-                    </div>
-
-                    {/*<StreamingAnalysis/>*/}
-                    <div className={'relative grid grid-cols-13 grid-rows-6 col-[13_/_span_13] row-[3_/_span_6]  z-20  rounded-3xl  glass bg-black/30 '}>
-
-                        {/*<div className={'absolute top-0  w-full h-full glass z-0 '}/>*/}
-                        <div className={'col-[1_/_span_7] row-[1_/_span_6] pt-10 relative pl-10'}>
-                            <div className="w-56 h-56 pb-3 ">
-                                <img
-                                    src={user?.images[0].url } alt="Avatar Tailwind CSS Component"
-                                    className=" w-full h-full object-cover rounded-lg"/>
-                            </div>
-                            <div>
-                                <ul className={''}>
-                                    <li className={'stat-value'}> { user?.display_name } </li>
-                                    <li className={'stat-title'}> { user?.followers.total } followers · { playlists?.total } Public Playlists </li>
-                                    {/*{ playlists && <li className={'stat-title'}> { playlists.total } public playlists  </li> }*/}
-                                    {/*<li className={'stat-title'}> { numberWithCommas(savedTracks) } Liked Songs  </li>*/}
-                                </ul>
-                            </div>
-
-                            <div className={'mt-5 w-64'}>
-                                {topGenres?.map((genre) => {
-                                    return(
-                                        <GenrePill genre={genre.name}/>
-                                    )
-                                })}
-                            </div>
-                        </div>
+                <FavoriteArtists favoriteArtists={shortTermTopArtists} onUpdateData={handleUpdateData}/>
+                <FavoriteTracks favoriteTracks={shortTermTopTracks} />
+                <FavoriteGenres favoriteGenres={topGenres} />
 
 
-                        <div className={'col-[5_/_span_7] row-[1_/span_6] pt-10 relative '}>
+                {/*<Section streamingAnalysis>*/}
 
-                            <div>
-                                <div className="stat-title font-black text-2xl ">Your Top Artists </div>
+                {/*    <div className={'relative grid grid-cols-7 col-[4_/_span_7] row-[4_/_span_6]  z-20'}>*/}
+                {/*        <div className={'absolute top-0 left-0 leading-6'}>*/}
+                {/*            <h1 className={'my-5 font-black text-6xl 2xl:text-7xl text-white'}>*/}
+                {/*                <span className={'inline-block xl:pr-[5vh]'}>*/}
+                {/*                    <span> {user?.display_name.split(" ")[0] }, </span><br/>*/}
+                {/*                    <span className={'break-normal text-green-400'}> all your tastes, blended into one </span>*/}
+                {/*                    <br/>*/}
 
-                                <ul>
-                                    { shortTermTopArtists.slice(0,5).map((artist, index) => (
-                                        <li key={index} className={'text-white/60 h-fit space-y-3 relative flex items-center gap-3   '}>
-                                            <span className={'text-2xl font-black'}>{index+1} </span>
+                {/*                    /!*<span> has been on repeat </span><br/>*!/*/}
+                {/*                    </span>*/}
+                {/*            </h1>*/}
+                {/*            <p className={'font-light text-xl text-gray-100 '}>*/}
+                {/*                <span className={'inline-block leading-loose'}>*/}
+                {/*                    Just an overall <span className={'italic'}> vibe </span> of your music taste.*/}
+                {/*                    <span className={'italic'}> Keep grooving. </span>*/}
+                {/*                </span>*/}
+                {/*            </p>*/}
+                {/*        </div>*/}
+                {/*    </div>*/}
 
-                                            <div className="w-16 h-16 ">
-                                                <img
-                                                    src={artist?.images[0].url } alt="Avatar Tailwind CSS Component"
-                                                    className=" w-full h-full object-cover "/>
-                                            </div>
+                {/*    /!*<StreamingAnalysis/>*!/*/}
+                {/*    <div className={'relative grid grid-cols-13 grid-rows-6 col-[13_/_span_13] row-[3_/_span_6]  z-20  rounded-3xl  glass bg-black/30 '}>*/}
 
-                                            <div>
-                                                <div className=""> { artist?.name }</div>
-                                                {/*<div className="stat-value">89,400</div>*/}
-                                            </div>
+                {/*        /!*<div className={'absolute top-0  w-full h-full glass z-0 '}/>*!/*/}
+                {/*        <div className={'col-[1_/_span_7] row-[1_/_span_6] pt-10 relative pl-10'}>*/}
+                {/*            <div className="w-56 h-56 pb-3 ">*/}
+                {/*                <img*/}
+                {/*                    src={user?.images[0].url } alt="Avatar Tailwind CSS Component"*/}
+                {/*                    className=" w-full h-full object-cover rounded-lg"/>*/}
+                {/*            </div>*/}
+                {/*            <div>*/}
+                {/*                <ul className={''}>*/}
+                {/*                    <li className={'stat-value'}> { user?.display_name } </li>*/}
+                {/*                    <li className={'stat-title'}> { user?.followers.total } followers · { playlists?.total } Public Playlists </li>*/}
+                {/*                    /!*{ playlists && <li className={'stat-title'}> { playlists.total } public playlists  </li> }*!/*/}
+                {/*                    /!*<li className={'stat-title'}> { numberWithCommas(savedTracks) } Liked Songs  </li>*!/*/}
+                {/*                </ul>*/}
+                {/*            </div>*/}
 
-
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        </div>
-
-
-                        <div className={'col-[9_/_span_7] row-[1_/span_6] pt-10 relative '}>
-                            <div>
-                                <div className="stat-title font-black text-2xl ">Your Top Tracks </div>
-                                <ul>
-                                    { shortTermTopTracks.slice(0,5).map((track, index) => (
-                                        <li key={index} className={'text-white/60 h-fit space-y-3 relative flex items-center gap-3   '}>
-                                            <span className={'text-2xl font-black'}>{index+1} </span>
-                                            <div className="w-16 h-16 ">
-                                                <img
-                                                    src={track?.album.images[0].url } alt="Avatar Tailwind CSS Component"
-                                                    className=" w-full h-full object-cover "/>
-                                            </div>
-                                            <div>
-                                                <div className="font-medium"> { track?.name }</div>
-                                                <div className="font-thin">
-                                                    {track?.artists?.map((artist, index) => {
-                                                        return(
-                                                            <>
-                                                                <span> {artist.name}</span>
-                                                                {index < track.artists.length - 1 && <span> , </span>}
-                                                            </>
-                                                        )
-                                                    })}
-                                                </div>
-                                            </div>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        </div>
+                {/*            <div className={'mt-5 w-64'}>*/}
+                {/*                {topGenres?.map((genre) => {*/}
+                {/*                    return(*/}
+                {/*                        <GenrePill genre={genre.name}/>*/}
+                {/*                    )*/}
+                {/*                })}*/}
+                {/*            </div>*/}
+                {/*        </div>*/}
 
 
+                {/*        <div className={'col-[5_/_span_7] row-[1_/span_6] pt-10 relative '}>*/}
+
+                {/*            <div>*/}
+                {/*                <div className="stat-title font-black text-2xl ">Your Top Artists </div>*/}
+
+                {/*                <ul>*/}
+                {/*                    { shortTermTopArtists.slice(0,5).map((artist, index) => (*/}
+                {/*                        <li key={index} className={'text-white/60 h-fit space-y-3 relative flex items-center gap-3   '}>*/}
+                {/*                            <span className={'text-2xl font-black'}>{index+1} </span>*/}
+
+                {/*                            <div className="w-16 h-16 ">*/}
+                {/*                                <img*/}
+                {/*                                    src={artist?.images[0].url } alt="Avatar Tailwind CSS Component"*/}
+                {/*                                    className=" w-full h-full object-cover "/>*/}
+                {/*                            </div>*/}
+
+                {/*                            <div>*/}
+                {/*                                <div className=""> { artist?.name }</div>*/}
+                {/*                                /!*<div className="stat-value">89,400</div>*!/*/}
+                {/*                            </div>*/}
 
 
+                {/*                        </li>*/}
+                {/*                    ))}*/}
+                {/*                </ul>*/}
+                {/*            </div>*/}
+                {/*        </div>*/}
 
 
-                    </div>
+                {/*        <div className={'col-[9_/_span_7] row-[1_/span_6] pt-10 relative '}>*/}
+                {/*            <div>*/}
+                {/*                <div className="stat-title font-black text-2xl ">Your Top Tracks </div>*/}
+                {/*                <ul>*/}
+                {/*                    { shortTermTopTracks.slice(0,5).map((track, index) => (*/}
+                {/*                        <li key={index} className={'text-white/60 h-fit space-y-3 relative flex items-center gap-3   '}>*/}
+                {/*                            <span className={'text-2xl font-black'}>{index+1} </span>*/}
+                {/*                            <div className="w-16 h-16 ">*/}
+                {/*                                <img*/}
+                {/*                                    src={track?.album.images[0].url } alt="Avatar Tailwind CSS Component"*/}
+                {/*                                    className=" w-full h-full object-cover "/>*/}
+                {/*                            </div>*/}
+                {/*                            <div>*/}
+                {/*                                <div className="font-medium"> { track?.name }</div>*/}
+                {/*                                <div className="font-thin">*/}
+                {/*                                    {track?.artists?.map((artist, index) => {*/}
+                {/*                                        return(*/}
+                {/*                                            <>*/}
+                {/*                                                <span> {artist.name}</span>*/}
+                {/*                                                {index < track.artists.length - 1 && <span> , </span>}*/}
+                {/*                                            </>*/}
+                {/*                                        )*/}
+                {/*                                    })}*/}
+                {/*                                </div>*/}
+                {/*                            </div>*/}
+                {/*                        </li>*/}
+                {/*                    ))}*/}
+                {/*                </ul>*/}
+                {/*            </div>*/}
+                {/*        </div>*/}
+                {/*    </div>*/}
 
-                </Section>
+                {/*</Section>*/}
 
             </Dashboard>
         }
