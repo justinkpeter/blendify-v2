@@ -25,6 +25,8 @@ import { ArtistCard } from "./components/ArtistCard/ArtistCard";
 import { GridItem } from "./components/GridItem";
 import {Carousel} from "./components/Carousel";
 import {numberWithCommas} from "./utils/functions";
+import {FavoriteArtists} from "./components/Sections/FavoriteArtists";
+import {FavoriteTracks} from "./components/Sections/FavoriteTracks";
 
 const spotify = new SpotifyWebApi();
 
@@ -368,119 +370,36 @@ function App() {
         setArtistModal(track)
     }
 
+    const [data, setData] = useState(null);
+
+    const handleUpdateData = (newData) => {
+        setData(newData);
+        console.log('new data is, ', newData)
+    };
+
 
 
 
   return (
     <div>
         <Navbar user={user}/>
-        <Modal artist={artistModal} id={id}/>
+        {/*<Modal artist={artistModal} id={id}/>*/}
+        <input type="checkbox" id="my-modal-3" className="modal-toggle" />
+        <div className="modal">
+            <div className="modal-box relative">
+                <label htmlFor="my-modal-3" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                <h3 className="text-lg font-bold">Congratulations random Internet user!</h3>
+                <p className="py-4">You've been selected for a chance to get one year of subscription to use Wikipedia for free!</p>
+            </div>
+        </div>
 
 
         { !token ? <Login/> :
             <Dashboard>
                 <Loading isLoading={isLoaded} user={user}/>
-                <Section>
-                    <SectionSummary/>
-                    <GridItem row={3} col={10} large >
-                        <label htmlFor={id} className="absolute btn w-full h-full border-0" onClick={() => handleArtistClick(shortTermTopArtists[0]?.id)}>
-                            <ArtistCard large artist={shortTermTopArtists[0]} />
-                        </label>
-                    </GridItem>
-                    <GridItem row={4} col={15} >
-                        <label htmlFor={id} className="absolute btn w-full h-full  absolute btn w-full h-full border-0" onClick={() => handleArtistClick(shortTermTopArtists[1]?.id)}>
-                            <ArtistCard rank={2} artist={shortTermTopArtists[1]} />
-                        </label>
-                    </GridItem>
-                    <GridItem row={7} col={18} >
-                        <label htmlFor={id} className="absolute btn w-full h-full  absolute btn w-full h-full border-0" onClick={() => handleArtistClick(shortTermTopArtists[2]?.id)}>
-                            <ArtistCard rank={3} artist={shortTermTopArtists[2]} />
-                        </label>
-                    </GridItem>
-                    <GridItem row={3} col={19} >
-                        <label htmlFor={id} className="absolute btn w-full h-full  absolute btn w-full h-full border-0" onClick={() => handleArtistClick(shortTermTopArtists[3]?.id)}>
-                            <ArtistCard rank={4} artist={shortTermTopArtists[3]} />
-                        </label>
-                    </GridItem>
-                    <GridItem row={2} col={23} >
-                        <label htmlFor={id} className="absolute btn w-full h-full absolute btn w-full h-full border-0 " onClick={() => handleArtistClick(shortTermTopArtists[4]?.id)}>
-                            <ArtistCard rank={5} artist={shortTermTopArtists[4]} />
-                        </label>
-                    </GridItem>
-                </Section>
-                <Section topTracks>
-                    <div className={'relative grid grid-cols-7 col-[3_/_span_7] row-[4_/_span_6] z-20'}>
-                        <div className={'absolute top-0 left-0 leading-6'}>
-                            <h1 className={'my-5 font-black text-6xl 2xl:text-7xl text-white'}>
-                                <span className={'inline-block xl:pr-[5vh]'}>
-                                    {/*<span> Grooving to </span><br/>*/}
-                                    <span className={'break-normal text-green-400'}> {shortTermTopTracks[0]?.name} </span>
-                                    <br/>
-                                    <span> has been on repeat </span><br/>
-                                 </span>
-                            </h1>
-                            <p className={'font-light text-xl text-gray-100 pr-[10vh]'}>
-                                <span className={'inline-block leading-loose'}>
-                                    Yeah, you have other songs you like to bump, but {shortTermTopTracks[0]?.name} by {shortTermTopTracks[0]?.artists[0]?.name} truly hit some chords with you.
-                                </span>
-                            </p>
-                        </div>
-                    </div>
-                    <Tile col={11} row={3} large>
-                        <Track
-                            large
-                            rank={1}
-                            image={shortTermTopTracks[0]?.album?.images[0]?.url}
-                            name={shortTermTopTracks[0]?.name}
-                            artists={shortTermTopTracks[0]?.artists}
-                            explicit={shortTermTopTracks[0]?.explicit}
-                        />
-                    </Tile>
-                    <Tile col={17} row={4} >
-                        <Track
-                            rank={2}
-                            image={shortTermTopTracks[1]?.album?.images[0]?.url}
-                            name={shortTermTopTracks[1]?.name}
-                            artists={shortTermTopTracks[1]?.artists}
-                            explicit={shortTermTopTracks[1]?.explicit}
-                        />
-                    </Tile>
-                    <Tile col={21} row={3}>
-                        <Track
-                            rank={3}
-                            image={shortTermTopTracks[2]?.album?.images[0]?.url}
-                            name={shortTermTopTracks[2]?.name}
-                            artists={shortTermTopTracks[2]?.artists}
-                            explicit={shortTermTopTracks[2]?.explicit}
-                        />
+                { isLoaded && <FavoriteArtists favoriteArtists={shortTermTopArtists} onUpdateData={handleUpdateData}/> }
+                { isLoaded && <FavoriteTracks favoriteTracks={shortTermTopTracks} onUpdateData={handleUpdateData}/> }
 
-                    </Tile>
-                    <Tile col={25} row={2}>
-                        <Track
-                            rank={4}
-                            image={shortTermTopTracks[3]?.album?.images[0]?.url}
-                            name={shortTermTopTracks[3]?.name}
-                            artists={shortTermTopTracks[3]?.artists}
-                            explicit={shortTermTopTracks[3]?.explicit}
-                        />
-                    </Tile>
-                    <Tile col={29} row={4}>
-                        <Track
-                            rank={5}
-                            image={shortTermTopTracks[4]?.album?.images[0]?.url}
-                            name={shortTermTopTracks[4]?.name}
-                            artists={shortTermTopTracks[4]?.artists}
-                            explicit={shortTermTopTracks[4]?.explicit}
-                        />
-                    </Tile>
-
-                    {/*/!* top 50 *!/*/}
-                    {/*<div className={'group relative col-[30_/_span_1] row-[8_/_span_1] bg-zinc-500/40  flex justify-center items-center rounded-xl text-white'}>*/}
-                    {/*    /!*<label htmlFor="my-modal-3" className="btn">open modal</label>*!/*/}
-                    {/*    <TopArtists/>*/}
-
-                    {/*</div>*/}
-                </Section>
                 <Section topGenres>
                     <div className={'relative grid grid-cols-7 col-[1_/_span_7] row-[4_/_span_6]  z-20'}>
                         <div className={'absolute top-0 left-0 leading-6'}>
