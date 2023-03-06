@@ -22,7 +22,7 @@ export const FavoriteArtists = ({favoriteArtists, onUpdateData}) => {
 
     return (
         <>
-            <div className={'grid grid-cols-26 grid-rows-10 h-section relative'}>
+            <section className={'grid grid-cols-26 grid-rows-10 h-section relative'}>
 
                 {/*    summary  */}
                 <div className={'relative grid grid-cols-7 col-[3_/_span_7] row-[4_/_span_6]  z-20'}>
@@ -66,7 +66,7 @@ export const FavoriteArtists = ({favoriteArtists, onUpdateData}) => {
                 })}
 
 
-            </div>
+            </section>
 
 
         </>
