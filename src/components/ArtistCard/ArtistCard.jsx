@@ -4,19 +4,12 @@ import {PlayIcon} from "@heroicons/react/24/solid";
 
 export const ArtistCardTitle = ({name,rank}) => {
 
-    const DefaultTitle = () => {
-        return(
-            <>
-                <span className={'text-lg xl:text-xl font-normal'}> Your Top Artist </span>
-            </>
-        )
-    }
     return (
         <>
-            <div className={'artist-card-title'}>
+            <div className={'artist-card-title  '}>
                 { rank && <span className={'text-lg font-normal'}> #{rank} </span> }
                 { !rank && <span className={'text-lg font-normal'}> Your Top Artist {rank} </span> }
-                <span className={'text-xl 2xl:text-3xl font-bold'}> {name} </span>
+                <span className={'text-3xl font-black'}> {name} </span>
             </div>
         </>
     );
@@ -31,7 +24,7 @@ export const ArtistCardImage = ({image, large}) => {
 
     return(
         <>
-            <img src={image} alt={'Artist Image'} className={`artist-card-image ${width} ${height}`}/>
+            <img src={image} alt={'Artist'} className={`artist-card-image ${width} ${height}`}/>
         </>
     )
 }
@@ -44,7 +37,7 @@ export const ArtistCardImageOverlay = () =>{
     )
 }
 
-export const ArtistCardContent = ({popularity, followers, topTrack}) => {
+export const ArtistCardContent = ({popularity, followers, topTrack, showAll}) => {
 
     const Popularity = ({popularity}) => {
         return(
@@ -79,17 +72,30 @@ export const ArtistCardContent = ({popularity, followers, topTrack}) => {
         )
     }
 
-    return(
-        <>
-            <div className={'artist-card-content'}>
-                <ul className={'font-medium w-2/3 overflow-hidden space-y-3.5'}>
-                    { popularity && <Popularity popularity={popularity}/> }
-                    { followers && <Followers followers={followers}/> }
-                    { topTrack && <TopTrack topTrack={topTrack}/> }
-                </ul>
-            </div>
-        </>
-    )
+    if(!showAll) {
+        return(
+            <>
+                <div className={'artist-card-content'}>
+                    <ul className={'font-medium w-2/3 overflow-hidden space-y-3.5'}>
+                        { topTrack && <TopTrack topTrack={topTrack}/> }
+                    </ul>
+                </div>
+            </>
+        )
+    }
+    else{
+        return(
+            <>
+                <div className={'artist-card-content'}>
+                    <ul className={'font-medium w-2/3 overflow-hidden space-y-3.5'}>
+                        { popularity && <Popularity popularity={popularity}/> }
+                        { followers && <Followers followers={followers}/> }
+                        { topTrack && <TopTrack topTrack={topTrack}/> }
+                    </ul>
+                </div>
+            </>
+        )
+    }
 }
 
 export const ArtistCardTrackPreview = ({topTrack}) => {
@@ -132,10 +138,8 @@ export const ArtistCardTrackPreview = ({topTrack}) => {
     )
 }
 
-export const ArtistCard  = ({children}) =>{
-
-
-
+export const ArtistCard  = ({artist, large, rank}) =>{
+// export const ArtistCard  = ({children}) =>{
     // function playTrack() {
     //     const audio = document.getElementById('myAudio')
     //     audio.volume = 0;
@@ -162,12 +166,29 @@ export const ArtistCard  = ({children}) =>{
     // }
 
 
+    // return(
+    //     <>
+    //         {/*<div className={'artist-card'} onMouseEnter={() => playTrack()} onMouseLeave={() => pauseTrack()}>*/}
+    //         <div className={'artist-card'} onClick={() => console.log('justin')} >
+    //             {children}
+    //         </div>
+    //     </>
+    // )
+
     return(
         <>
-            {/*<div className={'artist-card'} onMouseEnter={() => playTrack()} onMouseLeave={() => pauseTrack()}>*/}
-            <div className={'artist-card'} >
-                {children}
+            <div className={'artist-card text-left normal-case'}  >
+                <ArtistCardTitle name={artist?.name} rank={rank}/>
+                <ArtistCardImage image={artist?.images[0].url} large={!!large}/>
+                <ArtistCardImageOverlay/>
+                <ArtistCardContent
+                    showAll={!!large}
+                    popularity={artist?.popularity}
+                    followers={artist?.followers.total === 0 ? null: artist?.followers.total}
+                    topTrack={artist?.top_track.name} />
+                <ArtistCardTrackPreview topTrack={artist?.top_track}/>
             </div>
         </>
     )
 }
+
