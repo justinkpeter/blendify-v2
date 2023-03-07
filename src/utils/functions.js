@@ -22,22 +22,13 @@ export function getPopularity(popularity) {
     }
 }
 
-export function getArtistTopTrack(artistId, token) {
-    return fetch(`https://api.spotify.com/v1/artists/${artistId}/top-tracks?market=US`, {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
-    }).then(response => response.json())
-        .then(data => data.tracks[0].name)
-}
-
 export function convertArtistReleaseDate(date) {
     if(date === undefined) return 0;
     const dateArr = date.split('-');
 
     let year = dateArr[0];
     let month = dateArr[1];
-    let day = dateArr[2];
+    // let day = dateArr[2];
 
     if (month === '01') {
         month = 'January';
@@ -96,30 +87,36 @@ export function getArtistAlbumSingleCount(related_releases) {
 }
 
 
-// export function getQuickStatCardTitle(title){
-//     switch(title){
-//         default: return title;
-//         case 'followers': return 'Followers';
-//         case 'popularity': return 'Popularity';
-//         case 'Latest releas'
-//     }
-// }
+export function getScrollPercentage(){
+    return ((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100)
+}
 
 
-const handleScroll = () => {
-    // get the scroll position  of the div element and console.log it
-    const element = document.getElementById('scrollable');
-
-    // get the element scroll percentage
-    const scrollPercent = element.scrollTop / (element.scrollHeight - element.clientHeight);
-
-    // console.log the scroll position
-    console.log(scrollPercent)
-
-    return (scrollPercent * 100);
+export function playLivePreview(id){
+    const audio = document.getElementById(id)
+    if(audio == null) return;
+    else{
+        audio.play();
+        const fade = setInterval(() => {
+            if (audio.volume < 0.99) {
+                audio.volume += 0.01;
+            } else {
+                clearInterval(fade);
+            }
+        }, 50);
+    }
 
 }
 
-export function getScrollPercentage(){
-    return ((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100)
+export function pauseLivePreview(id){
+    const audio = document.getElementById(id)
+    if(audio == null) return;
+    const fade = setInterval(() => {
+        if (audio.volume > 0.01) {
+            audio.volume -= 0.01;
+        } else {
+            clearInterval(fade);
+            audio.pause();
+        }
+    }, 50);
 }
