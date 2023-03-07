@@ -12,7 +12,6 @@ import './styles/TopTracks.css'
 
 
 import SpotifyWebApi from "spotify-web-api-js";
-import './styles/ArtistCard.css'
 
 
 import {FavoriteArtists} from "./components/Sections/FavoriteArtists";
@@ -106,14 +105,14 @@ function App() {
 
         // get user number of playlists
         const playlists = await spotify.getUserPlaylists(user.id).then((playlists) => {
-            console.log('playlist number is: ', playlists)
+            // console.log('playlist number is: ', playlists)
             return playlists
         })
 
 
 
         // getting top artists
-        const shortTermTopArtists = await spotify.getMyTopArtists({time_range: 'short_term', limit: 50}).then((response) => {console.log('here is the response', response); return response.items})
+        const shortTermTopArtists = await spotify.getMyTopArtists({time_range: 'short_term', limit: 50}).then((response) => {return response.items})
         const mediumTermTopArtists = await spotify.getMyTopArtists({time_range: 'medium_term', limit: 10}).then((response) => {return response.items})
         const longTermTopArtists = await spotify.getMyTopArtists({time_range: 'long_term', limit: 10}).then((response) => {return response.items})
 
@@ -154,7 +153,6 @@ function App() {
                 // find artist in shortTermTopArtists
                 let match = shortTermTopArtists.find((a) => a.id === artist.id)
                 if(match){
-                    // console.log('match is', match)
                     match.genres.map((genre) => {
                         if(shortTermTopGenres.includes(genre)){
                             genreFrequency[genre] += 1
@@ -168,7 +166,6 @@ function App() {
             })
         })
 
-        console.log('shortTermTopGenres is', shortTermTopGenres, genreFrequency)
 
         // get the top 5 highest frequency genres
         const sortedGenres = Object.keys(genreFrequency).sort(function(a,b){return genreFrequency[b]-genreFrequency[a]})
@@ -179,7 +176,6 @@ function App() {
             {name: sortedGenres[3], percentage: Math.round(genreFrequency[sortedGenres[3]]/ shortTermTopGenres.length * 100)},
             {name: sortedGenres[4], percentage: Math.round(genreFrequency[sortedGenres[4]]/ shortTermTopGenres.length * 100)},
         ]
-        console.log('topGenres is', topGenres)
 
         // getting related artists
         const shortTermTopArtistsRelatedArtists = await Promise.all(shortTermTopArtists.map(async (artist) => {
@@ -224,7 +220,6 @@ function App() {
             //     type: 'SET_SAVED_TRACKS',
             //     savedTracks: response.items
             // })
-            console.log('saved tracks are', response.total)
             dispatch({
                 type: 'SET_SAVED_TRACKS',
                 savedTracks: response.total
@@ -257,12 +252,6 @@ function App() {
         await dispatchTopGenres(topGenres)
         await dispatchPlaylists(playlists)
         await dispatchIsLoaded(true)
-
-        // console.log(playlists)
-
-        // after data is fetched, set isLoaded to true
-
-
     }
 
 
@@ -302,8 +291,6 @@ function App() {
 
 
     const [{shortTermTopArtists, shortTermTopTracks, topGenres, savedTracks, playlists, isLoaded } ] = useDataLayerValue();
-
-    const [data, setData] = useState(null);
     const [selectedArtist, setSelectedArtist] = useState(null);
 
     const handleUpdateData = async(newData) => {

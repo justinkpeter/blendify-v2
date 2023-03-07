@@ -1,6 +1,8 @@
-import React, {useState} from 'react';
-import { numberWithCommas } from "../../utils/functions";
+import React, {useState, useEffect} from 'react';
+import { numberWithCommas, playLivePreview, pauseLivePreview } from "../../utils/functions";
 import {PlayIcon} from "@heroicons/react/24/solid";
+import '../../styles/ArtistCard.css'
+
 
 export const ArtistCardTitle = ({name,rank}) => {
 
@@ -98,7 +100,7 @@ export const ArtistCardContent = ({popularity, followers, topTrack, showAll}) =>
     }
 }
 
-export const ArtistCardTrackPreview = ({topTrack}) => {
+export const ArtistCardTrackPreview = ({topTrack, previewTrack}) => {
 
     const [playTime, setPlayTime] = useState(0)
 
@@ -112,7 +114,15 @@ export const ArtistCardTrackPreview = ({topTrack}) => {
 
     }
 
-
+    useEffect(() => {
+        if(previewTrack == true ){
+            playLivePreview(trackPreviewId)
+        }
+        else if(previewTrack == false){
+            pauseLivePreview(trackPreviewId)
+        }
+    })
+    
     return(
         <>
             <div className={'artist-card-player bg-blue-300'}>
@@ -140,44 +150,20 @@ export const ArtistCardTrackPreview = ({topTrack}) => {
 
 export const ArtistCard  = ({artist, large, rank}) =>{
 // export const ArtistCard  = ({children}) =>{
-    // function playTrack() {
-    //     const audio = document.getElementById('myAudio')
-    //     audio.volume = 0;
-    //     audio.play();
-    //     const fade = setInterval(() => {
-    //         if (audio.volume < 0.99) {
-    //             audio.volume += 0.01;
-    //         } else {
-    //             clearInterval(fade);
-    //         }
-    //     }, 50);
-    //
-    // }
-    // function pauseTrack() {
-    //     const audio = document.getElementById('myAudio')
-    //     const fade = setInterval(() => {
-    //         if (audio.volume > 0.01) {
-    //             audio.volume -= 0.01;
-    //         } else {
-    //             clearInterval(fade);
-    //             audio.pause();
-    //         }
-    //     })
-    // }
 
 
-    // return(
-    //     <>
-    //         {/*<div className={'artist-card'} onMouseEnter={() => playTrack()} onMouseLeave={() => pauseTrack()}>*/}
-    //         <div className={'artist-card'} onClick={() => console.log('justin')} >
-    //             {children}
-    //         </div>
-    //     </>
-    // )
+    const [isHovered, setIsHovered] = useState(false)
+    const playTrack = () => {
+        setIsHovered(true)
+    }
+
+    const pauseTrack = () => {
+        setIsHovered(false)
+    }
 
     return(
         <>
-            <div className={'artist-card text-left normal-case'}  >
+            <div className={'artist-card text-left normal-case '}  onMouseEnter={() => playTrack()} onMouseLeave={() => pauseTrack()}>
                 <ArtistCardTitle name={artist?.name} rank={rank}/>
                 <ArtistCardImage image={artist?.images[0].url} large={!!large}/>
                 <ArtistCardImageOverlay/>
@@ -186,7 +172,7 @@ export const ArtistCard  = ({artist, large, rank}) =>{
                     popularity={artist?.popularity}
                     followers={artist?.followers.total === 0 ? null: artist?.followers.total}
                     topTrack={artist?.top_track.name} />
-                <ArtistCardTrackPreview topTrack={artist?.top_track}/>
+                <ArtistCardTrackPreview topTrack={artist?.top_track} previewTrack={isHovered}/>
             </div>
         </>
     )
