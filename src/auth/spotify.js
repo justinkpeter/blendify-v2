@@ -18,6 +18,7 @@ const scopes = [
     "user-read-playback-state",
     "user-top-read",
     "user-modify-playback-state",
+    "user-library-read"
 ];
 
 // function to extract token from URL
