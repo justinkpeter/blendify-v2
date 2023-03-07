@@ -2,32 +2,23 @@ import React, { useEffect, useState } from "react";
 import { Login } from "./Login";
 import { Dashboard } from "./Dashboard";
 import { Navbar } from "./components/Navbar";
-import { Section } from "./components/Section";
 import { useDataLayerValue } from "./utils/DataLayer";
 import { getTokenFromUrl } from "./auth/spotify";
 
-import { GenrePill, Modal } from "./components/Modal";
-import { ModalNav } from "./components/Modals/ModalNav";
-import { TopArtists } from "./components/TopArtists";
-import { GenreBar, TopGenres } from "./components/TopGenres/GenreBar";
 
 import './styles/TopTracks.css'
 
-import { Track } from "./components/TopTracks/Track";
-import { Tile } from "./components/Tile";
-// import { GenrePill } from "./components/TopGenres/";
+
 
 
 import SpotifyWebApi from "spotify-web-api-js";
 import './styles/ArtistCard.css'
 
-import { ArtistCard } from "./components/ArtistCard/ArtistCard";
-import { GridItem } from "./components/GridItem";
-import {Carousel} from "./components/Carousel";
-import {numberWithCommas} from "./utils/functions";
+
 import {FavoriteArtists} from "./components/Sections/FavoriteArtists";
 import {FavoriteTracks} from "./components/Sections/FavoriteTracks";
 import {FavoriteGenres} from "./components/Sections/FavoriteGenres";
+import {StreamingAnalysis} from "./components/Sections/StreamingAnalysis";
 
 const spotify = new SpotifyWebApi();
 
@@ -122,7 +113,7 @@ function App() {
 
 
         // getting top artists
-        const shortTermTopArtists = await spotify.getMyTopArtists({time_range: 'short_term', limit: 50}).then((response) => {return response.items})
+        const shortTermTopArtists = await spotify.getMyTopArtists({time_range: 'short_term', limit: 50}).then((response) => {console.log('here is the response', response); return response.items})
         const mediumTermTopArtists = await spotify.getMyTopArtists({time_range: 'medium_term', limit: 10}).then((response) => {return response.items})
         const longTermTopArtists = await spotify.getMyTopArtists({time_range: 'long_term', limit: 10}).then((response) => {return response.items})
 
@@ -240,6 +231,24 @@ function App() {
             })
         })
 
+        spotify.getMyTopArtists({time_range: 'short_term', limit:50})
+            .then(response => console.log('response is', response))
+            // .then(data => {
+            //     // Extract the artist IDs from the response
+            //     const artistIds = data.items.map(item => item.id);
+            //     // Use the artist IDs to make individual requests to get more information about each artist
+            //     // const artistInfoUrls = artistIds.map(id => `https://api.spotify.com/v1/artists/${id}`);
+            //
+            //     return Promise.all(spotify.getArtists(artistIds).then(response => response.JSON()))
+            //     // return Promise.all(artistInfoUrls.map(url => fetch(url, { headers: { 'Authorization': `Bearer ${accessToken}` } }).then(response => response.json())));
+            // })
+            // .then(artistData => {
+            //     // Extract the unique artist names from the response
+            //     const artistNames = [...new Set(artistData.map(artist => artist.name))];
+            //     console.log(`The user has listened to ${artistNames.length} different artists within the last 4 months.`);
+            // })
+            // .catch(error => console.error(error));
+
 
 
         await dispatchTopArtists(shortTermTopArtists, mediumTermTopArtists, longTermTopArtists)
@@ -289,15 +298,6 @@ function App() {
                 </div>}
             </>
         )
-
-
-        // if(!isLoading){
-        //     <>
-        //         <div className={'loading w-full h-full'}></div>
-        //     </>
-        // }
-        // else
-        //     return null
     }
 
 
@@ -307,6 +307,7 @@ function App() {
         return(
             <div className={'relative grid grid-cols-7 col-[3_/_span_7] row-[4_/_span_6]  z-20'}>
                 <div className={'absolute top-0 left-0 leading-6'}>
+
                     <h1 className={'my-5 font-black text-6xl 2xl:text-7xl text-white'}>
                         <span className={'inline-block lg:pr-[5vh]'}>
                             <span> Grooving to </span><br/>
@@ -401,122 +402,7 @@ function App() {
                 <FavoriteArtists favoriteArtists={shortTermTopArtists} onUpdateData={handleUpdateData}/>
                 <FavoriteTracks favoriteTracks={shortTermTopTracks} />
                 <FavoriteGenres favoriteGenres={topGenres} />
-
-
-                {/*<Section streamingAnalysis>*/}
-
-                {/*    <div className={'relative grid grid-cols-7 col-[4_/_span_7] row-[4_/_span_6]  z-20'}>*/}
-                {/*        <div className={'absolute top-0 left-0 leading-6'}>*/}
-                {/*            <h1 className={'my-5 font-black text-6xl 2xl:text-7xl text-white'}>*/}
-                {/*                <span className={'inline-block xl:pr-[5vh]'}>*/}
-                {/*                    <span> {user?.display_name.split(" ")[0] }, </span><br/>*/}
-                {/*                    <span className={'break-normal text-green-400'}> all your tastes, blended into one </span>*/}
-                {/*                    <br/>*/}
-
-                {/*                    /!*<span> has been on repeat </span><br/>*!/*/}
-                {/*                    </span>*/}
-                {/*            </h1>*/}
-                {/*            <p className={'font-light text-xl text-gray-100 '}>*/}
-                {/*                <span className={'inline-block leading-loose'}>*/}
-                {/*                    Just an overall <span className={'italic'}> vibe </span> of your music taste.*/}
-                {/*                    <span className={'italic'}> Keep grooving. </span>*/}
-                {/*                </span>*/}
-                {/*            </p>*/}
-                {/*        </div>*/}
-                {/*    </div>*/}
-
-                {/*    /!*<StreamingAnalysis/>*!/*/}
-                {/*    <div className={'relative grid grid-cols-13 grid-rows-6 col-[13_/_span_13] row-[3_/_span_6]  z-20  rounded-3xl  glass bg-black/30 '}>*/}
-
-                {/*        /!*<div className={'absolute top-0  w-full h-full glass z-0 '}/>*!/*/}
-                {/*        <div className={'col-[1_/_span_7] row-[1_/_span_6] pt-10 relative pl-10'}>*/}
-                {/*            <div className="w-56 h-56 pb-3 ">*/}
-                {/*                <img*/}
-                {/*                    src={user?.images[0].url } alt="Avatar Tailwind CSS Component"*/}
-                {/*                    className=" w-full h-full object-cover rounded-lg"/>*/}
-                {/*            </div>*/}
-                {/*            <div>*/}
-                {/*                <ul className={''}>*/}
-                {/*                    <li className={'stat-value'}> { user?.display_name } </li>*/}
-                {/*                    <li className={'stat-title'}> { user?.followers.total } followers · { playlists?.total } Public Playlists </li>*/}
-                {/*                    /!*{ playlists && <li className={'stat-title'}> { playlists.total } public playlists  </li> }*!/*/}
-                {/*                    /!*<li className={'stat-title'}> { numberWithCommas(savedTracks) } Liked Songs  </li>*!/*/}
-                {/*                </ul>*/}
-                {/*            </div>*/}
-
-                {/*            <div className={'mt-5 w-64'}>*/}
-                {/*                {topGenres?.map((genre) => {*/}
-                {/*                    return(*/}
-                {/*                        <GenrePill genre={genre.name}/>*/}
-                {/*                    )*/}
-                {/*                })}*/}
-                {/*            </div>*/}
-                {/*        </div>*/}
-
-
-                {/*        <div className={'col-[5_/_span_7] row-[1_/span_6] pt-10 relative '}>*/}
-
-                {/*            <div>*/}
-                {/*                <div className="stat-title font-black text-2xl ">Your Top Artists </div>*/}
-
-                {/*                <ul>*/}
-                {/*                    { shortTermTopArtists.slice(0,5).map((artist, index) => (*/}
-                {/*                        <li key={index} className={'text-white/60 h-fit space-y-3 relative flex items-center gap-3   '}>*/}
-                {/*                            <span className={'text-2xl font-black'}>{index+1} </span>*/}
-
-                {/*                            <div className="w-16 h-16 ">*/}
-                {/*                                <img*/}
-                {/*                                    src={artist?.images[0].url } alt="Avatar Tailwind CSS Component"*/}
-                {/*                                    className=" w-full h-full object-cover "/>*/}
-                {/*                            </div>*/}
-
-                {/*                            <div>*/}
-                {/*                                <div className=""> { artist?.name }</div>*/}
-                {/*                                /!*<div className="stat-value">89,400</div>*!/*/}
-                {/*                            </div>*/}
-
-
-                {/*                        </li>*/}
-                {/*                    ))}*/}
-                {/*                </ul>*/}
-                {/*            </div>*/}
-                {/*        </div>*/}
-
-
-                {/*        <div className={'col-[9_/_span_7] row-[1_/span_6] pt-10 relative '}>*/}
-                {/*            <div>*/}
-                {/*                <div className="stat-title font-black text-2xl ">Your Top Tracks </div>*/}
-                {/*                <ul>*/}
-                {/*                    { shortTermTopTracks.slice(0,5).map((track, index) => (*/}
-                {/*                        <li key={index} className={'text-white/60 h-fit space-y-3 relative flex items-center gap-3   '}>*/}
-                {/*                            <span className={'text-2xl font-black'}>{index+1} </span>*/}
-                {/*                            <div className="w-16 h-16 ">*/}
-                {/*                                <img*/}
-                {/*                                    src={track?.album.images[0].url } alt="Avatar Tailwind CSS Component"*/}
-                {/*                                    className=" w-full h-full object-cover "/>*/}
-                {/*                            </div>*/}
-                {/*                            <div>*/}
-                {/*                                <div className="font-medium"> { track?.name }</div>*/}
-                {/*                                <div className="font-thin">*/}
-                {/*                                    {track?.artists?.map((artist, index) => {*/}
-                {/*                                        return(*/}
-                {/*                                            <>*/}
-                {/*                                                <span> {artist.name}</span>*/}
-                {/*                                                {index < track.artists.length - 1 && <span> , </span>}*/}
-                {/*                                            </>*/}
-                {/*                                        )*/}
-                {/*                                    })}*/}
-                {/*                                </div>*/}
-                {/*                            </div>*/}
-                {/*                        </li>*/}
-                {/*                    ))}*/}
-                {/*                </ul>*/}
-                {/*            </div>*/}
-                {/*        </div>*/}
-                {/*    </div>*/}
-
-                {/*</Section>*/}
-
+                <StreamingAnalysis favoriteGenres={topGenres} playlists={playlists} user={user} favoriteArtists={shortTermTopArtists} favoriteTracks={shortTermTopTracks}/>
             </Dashboard>
         }
     </div>
