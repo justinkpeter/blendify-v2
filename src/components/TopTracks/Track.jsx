@@ -21,7 +21,7 @@ const TrackRank = ({rank, explicit}) => {
 
 // displays the image of the track
 const TrackImage = ({image, large}) => {
-    const imageClass = large ? 'top-track-image relative h-[50vh]' : 'top-track-image relative h-[30vh]';
+    const imageClass = large ? 'top-track-image relative h-[50vh]' : 'top-track-image relative h-[30vh] w-[30vh]';
     return(
         <>
             <div className={imageClass}>
@@ -65,9 +65,12 @@ const TrackInfo = ({name, artists}) => {
 
 // parent component to display the track and all of its goods --- rank, image, name, artists
 export const Track = ({rank, image, name, large, artists, explicit}) => {
+
+    const trackClass = large ? 'w-[50vh] h-full top-track relative' : 'w-[30vh] h-full top-track relative';
+
     return(
         <>
-            <div className={'w-full h-full top-track relative '}>
+            <div className={trackClass}>
                 <TrackRank rank={rank} explicit={explicit}/>
                 <TrackImage image={image} large={large}/>
                 <TrackInfo name={name} artists={artists}/>
