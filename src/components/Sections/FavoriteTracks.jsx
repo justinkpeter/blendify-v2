@@ -46,6 +46,7 @@ export const FavoriteTracks = ({favoriteTracks}) => {
                                     name={favoriteTracks[0]?.name}
                                     artists={favoriteTracks[0]?.artists}
                                     explicit={favoriteTracks[0]?.explicit}
+                                    preview={favoriteTracks[index]?.preview_url}
                                 />
                             </Tile>
                         )
@@ -59,6 +60,7 @@ export const FavoriteTracks = ({favoriteTracks}) => {
                                     name={favoriteTracks[index]?.name}
                                     artists={favoriteTracks[index]?.artists}
                                     explicit={favoriteTracks[index]?.explicit}
+                                    preview={favoriteTracks[index]?.preview_url}
                                 />
                             </Tile>
                         )
