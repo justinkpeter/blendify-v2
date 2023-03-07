@@ -1,6 +1,6 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import '../../styles/TopTracks.css'
-
+import { playLivePreview, pauseLivePreview} from "../../utils/functions";
 import { ExplicitIcon } from "../Icons/ExplicitIcon";
 import { PlayIcon } from "@heroicons/react/24/solid";
 
@@ -35,7 +35,17 @@ const TrackImage = ({image, large}) => {
 }
 
 // displays the name and artists of the track
-const TrackInfo = ({name, artists}) => {
+const TrackInfo = ({name, artists, previewUrl, previewTrack, id}) => {
+
+    useEffect(() => {
+        if(previewTrack === true ){
+            playLivePreview(id)
+        }
+        else if(previewTrack === false){
+            pauseLivePreview(id)
+        }
+    })
+
     return(
         <>
             <div className={'flex text-left normal-case items-center my-6 text-white '}>
@@ -57,6 +67,7 @@ const TrackInfo = ({name, artists}) => {
                         })}
                     </h3>
                 </div>
+                <audio id={name?.replace(/\s/g, '-').toLowerCase()} preload="none" src={previewUrl} ></audio>
             </div>
         </>
     )
@@ -64,16 +75,28 @@ const TrackInfo = ({name, artists}) => {
 
 
 // parent component to display the track and all of its goods --- rank, image, name, artists
-export const Track = ({rank, image, name, large, artists, explicit}) => {
+export const Track = ({rank, image, name, large, artists, explicit, preview}) => {
 
     const trackClass = large ? 'w-[50vh] h-full top-track relative' : 'w-[30vh] h-full top-track relative';
+    const trackId = name?.replace(/\s/g, '-').toLowerCase()
+    const [isHovered, setIsHovered] = useState(false)
+
+    const playTrack = () => {
+        setIsHovered(true)
+    }
+
+    const pauseTrack = () => {
+        setIsHovered(false)
+    }
+
+
 
     return(
         <>
-            <div className={trackClass}>
+            <div className={trackClass} onMouseEnter={() => playTrack()} onMouseLeave={() => pauseTrack()}>
                 <TrackRank rank={rank} explicit={explicit}/>
                 <TrackImage image={image} large={large}/>
-                <TrackInfo name={name} artists={artists}/>
+                <TrackInfo name={name} artists={artists} previewUrl={preview} previewTrack={isHovered} id={trackId}/>
             </div>
         </>
     )
