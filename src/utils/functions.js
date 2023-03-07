@@ -103,7 +103,7 @@ export function playLivePreview(id){
             } else {
                 clearInterval(fade);
             }
-        }, 50);
+        }, 30);
     }
 
 }
@@ -118,5 +118,5 @@ export function pauseLivePreview(id){
             clearInterval(fade);
             audio.pause();
         }
-    }, 50);
+    }, 15);
 }
