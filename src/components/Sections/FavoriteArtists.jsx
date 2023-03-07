@@ -13,9 +13,8 @@ export const FavoriteArtists = ({favoriteArtists, onUpdateData}) => {
         {row: 2, col: 23}
     ]
     const handleButtonClick = (artist) => {
-        if(artist) return 0;
-        else
-            onUpdateData(artist?.id);
+        if(!artist) return null;
+        return onUpdateData(artist);
     };
 
     if(!favoriteArtists) return null;
@@ -23,7 +22,6 @@ export const FavoriteArtists = ({favoriteArtists, onUpdateData}) => {
     return (
         <>
             <section className={'grid grid-cols-26 grid-rows-10 h-section relative'}>
-
                 {/*    summary  */}
                 <div className={'relative grid grid-cols-7 col-[3_/_span_7] row-[4_/_span_6]  z-20'}>
                     <div className={'absolute top-0 left-0 leading-6'}>
@@ -50,7 +48,7 @@ export const FavoriteArtists = ({favoriteArtists, onUpdateData}) => {
                     if(index === 0){
                         return (
                             <GridItem key={index} row={position.row} col={position.col} large animate={'visible'} custom={index}>
-                                <label htmlFor="my-modal-3" className="absolute btn w-full h-full border-0" onClick={handleButtonClick(favoriteArtists[index])}>
+                                <label htmlFor="modal" className="absolute btn w-full h-full border-0" onClick={() => handleButtonClick(favoriteArtists[index])}>
                                     <ArtistCard large artist={favoriteArtists[index]}  />
                                 </label>
                             </GridItem>
@@ -58,7 +56,7 @@ export const FavoriteArtists = ({favoriteArtists, onUpdateData}) => {
                     }
                     return (
                         <GridItem key={index} row={position.row} col={position.col} animate={'visible'} custom={index}>
-                            <label htmlFor="my-modal-3" className="absolute btn w-full h-full border-0" onClick={handleButtonClick(favoriteArtists[index])}>
+                            <label htmlFor="modal" className="absolute btn w-full h-full border-0" onClick={() => handleButtonClick(favoriteArtists[index])}>
                                 <ArtistCard rank={index + 1} artist={favoriteArtists[index]}  />
                             </label>
                         </GridItem>
