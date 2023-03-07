@@ -4,7 +4,7 @@ import { Dashboard } from "./Dashboard";
 import { Navbar } from "./components/Navbar";
 import { useDataLayerValue } from "./utils/DataLayer";
 import { getTokenFromUrl } from "./auth/spotify";
-
+import { Modal } from "./components/Modal";
 
 import './styles/TopTracks.css'
 
@@ -231,8 +231,8 @@ function App() {
             })
         })
 
-        spotify.getMyTopArtists({time_range: 'short_term', limit:50})
-            .then(response => console.log('response is', response))
+        // spotify.getMyTopArtists({time_range: 'short_term', limit:50})
+        //     .then(response => console.log('response is', response))
             // .then(data => {
             //     // Extract the artist IDs from the response
             //     const artistIds = data.items.map(item => item.id);
@@ -280,7 +280,7 @@ function App() {
 
         }
 
-    }, [getSpotifyData]);
+    } );
 
 
     const Loading = ({isLoading, user}) => {
@@ -301,100 +301,53 @@ function App() {
     }
 
 
-    const SectionSummary = () => {
-        const [{ shortTermTopArtists, shortTermTopTracks }, dispatch ] = useDataLayerValue();
-        const topArtist = shortTermTopArtists[0]
-        return(
-            <div className={'relative grid grid-cols-7 col-[3_/_span_7] row-[4_/_span_6]  z-20'}>
-                <div className={'absolute top-0 left-0 leading-6'}>
-
-                    <h1 className={'my-5 font-black text-6xl 2xl:text-7xl text-white'}>
-                        <span className={'inline-block lg:pr-[5vh]'}>
-                            <span> Grooving to </span><br/>
-                            <span className={'break-normal text-green-400'}> {topArtist?.name} </span>
-                            <br/>
-                         </span>
-                    </h1>
-                    <p className={'font-light text-xl text-gray-100 pr-[10vh]'}>
-                        <span className={'inline-block leading-loose'}>
-                            When it comes to that one artist to grace your ears, nobody does is quite
-                            like {topArtist?.name} for you!
-                        </span>
-                    </p>
-                </div>
-            </div>
-        )
-    }
-
-
-  const [{shortTermTopArtists, shortTermTopTracks, topGenres, savedTracks, playlists, isLoaded } ] = useDataLayerValue();
-  const topArtist = shortTermTopArtists[0]
-
-
-    const [id, setId] = useState(null)
-
-
-    const [test, setTest] = useState('')
-    const [artistModal, setArtistModal] = useState(null)
-
-    const handleItemClick = (gridItem) => {
-        setId(gridItem)
-        // setArtistModal({name: 'Justin Bieber', id: '1uNFoZAHBGtllmzznpCI3s'})
-        setTest('hooray')
-        let artist = getTileInfo(gridItem)
-        setArtistModal(artist)
-    }
-
-    const getTileInfo = (id) => {
-        const artist = shortTermTopArtists?.find(artist => artist.id === id)
-        return artist
-    }
-
-    const getArtistInfo = (id) => {
-        const artist = shortTermTopArtists?.find(artist => artist.id === id)
-        return artist
-    }
-
-    const getTrackInfo = (id) => {
-        const track = shortTermTopTracks?.find(track => track.id === id)
-        return track
-    }
-
-    const handleArtistClick = (gridItem) => {
-        setId(gridItem)
-        let artist = getArtistInfo(gridItem)
-        setArtistModal(artist)
-    }
-
-    const handleTrackClick = (gridItem) => {
-        setId(gridItem)
-        let track = getTrackInfo(gridItem)
-        setArtistModal(track)
-    }
+    const [{shortTermTopArtists, shortTermTopTracks, topGenres, savedTracks, playlists, isLoaded } ] = useDataLayerValue();
 
     const [data, setData] = useState(null);
+    const [selectedArtist, setSelectedArtist] = useState(null);
 
-    const handleUpdateData = (newData) => {
-        setData(newData);
-        console.log('new data is, ', newData)
+    const handleUpdateData = async(newData) => {
+
+        // set modal state loading to true
+
+        // fetch new data
+        if(newData){
+            console.log(newData)
+            // get artist data
+            const artistData = await spotify.getArtist(newData.id).then((response) => {
+                return response
+            })
+
+            // get artist top tracks
+            const topTracks = await spotify.getArtistTopTracks(newData.id, 'US').then((response) => {
+                artistData.top_tracks = response.tracks
+            })
+
+            // get artist related artists
+            const relatedArtists = await spotify.getArtistRelatedArtists(newData.id).then((response) => {
+                artistData.related_artists = response.artists
+            })
+
+            // get artist related releases
+            const relatedReleases = await spotify.getArtistAlbums(newData.id, {limit: 50}).then((response) => {
+                artistData.related_releases = response.items
+            })
+
+            setSelectedArtist(artistData)
+        }
+
+
+        // once data is fetched, set modal state loading to false
+        setModalDataLoading(false)
     };
 
-
+    const [modalDataLoading, setModalDataLoading] = useState(true);
 
 
   return (
     <div>
         <Navbar user={user}/>
-        {/*<Modal artist={artistModal} id={id}/>*/}
-        <input type="checkbox" id="my-modal-3" className="modal-toggle" />
-        <div className="modal">
-            <div className="modal-box relative">
-                <label htmlFor="my-modal-3" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
-                <h3 className="text-lg font-bold">Congratulations random Internet user!</h3>
-                <p className="py-4">You've been selected for a chance to get one year of subscription to use Wikipedia for free!</p>
-            </div>
-        </div>
-
+        <Modal loading={modalDataLoading} artist={selectedArtist}/>
 
         { !token ? <Login/> :
             <Dashboard>
@@ -402,7 +355,12 @@ function App() {
                 <FavoriteArtists favoriteArtists={shortTermTopArtists} onUpdateData={handleUpdateData}/>
                 <FavoriteTracks favoriteTracks={shortTermTopTracks} />
                 <FavoriteGenres favoriteGenres={topGenres} />
-                <StreamingAnalysis favoriteGenres={topGenres} playlists={playlists} user={user} favoriteArtists={shortTermTopArtists} favoriteTracks={shortTermTopTracks}/>
+                <StreamingAnalysis
+                    user={user}
+                    favoriteGenres={topGenres}
+                    playlists={playlists}
+                    favoriteArtists={shortTermTopArtists}
+                    favoriteTracks={shortTermTopTracks}/>
             </Dashboard>
         }
     </div>
