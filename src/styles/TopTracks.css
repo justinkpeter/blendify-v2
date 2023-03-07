@@ -1,0 +1,42 @@
+.top-track{
+    /*overflow: hidden;*/
+    /*width: 30vh;*/
+}
+
+.top-track-rank{
+    color:gray;
+    transition: ease-in-out;
+    transition-duration: 0.2s;
+}
+
+.top-track:hover .top-track-rank{
+    color: white;
+    transition: ease-in-out;
+    transition-duration: 0.2s;
+}
+
+.top-track-image{
+    position: relative;
+    overflow: hidden;
+    transition: ease-in-out;
+    transition-duration: 0.8s;
+
+
+}
+
+
+
+.top-track:hover .top-track-image > div{
+    /*height: 50vh;*/
+    transition: ease-in-out;
+    scale: 1.1;
+    transition-duration: 0.8s;
+}
+
+.top-track .top-track-image > div{
+    /*height: 50vh;*/
+    transition: ease-in-out;
+    scale: 1;
+    transition-duration: 0.8s;
+}
+
