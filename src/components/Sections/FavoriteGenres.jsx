@@ -1,24 +1,24 @@
 import React from "react";
-import { motion } from "framer-motion";
+// import { motion } from "framer-motion";
 const GenreBar = ({name, percentage, index, color}) => {
 
-    const variants = {
-        visible: i => ({
-            transform: `scaleY(1)`,
-            // opacity: 1,
-            transition: {
-                delay: i * 0.25,
-                duration: 1.4,
-                type: 'easeOut',
-            },
-            transformOrigin: 'bottom'
-        }),
-        hidden: {
-            // opacity: 0,
-            transform: `scaleY(0)`,
-            transformOrigin: 'bottom'
-        },
-    }
+    // const variants = {
+    //     visible: i => ({
+    //         transform: `scaleY(1)`,
+    //         // opacity: 1,
+    //         transition: {
+    //             delay: i * 0.25,
+    //             duration: 1.4,
+    //             type: 'easeOut',
+    //         },
+    //         transformOrigin: 'bottom'
+    //     }),
+    //     hidden: {
+    //         // opacity: 0,
+    //         transform: `scaleY(0)`,
+    //         transformOrigin: 'bottom'
+    //     },
+    // }
 
     if(!percentage) return null;
 
@@ -29,11 +29,17 @@ const GenreBar = ({name, percentage, index, color}) => {
                 <div className={'relative h-[50vh] overflow-hidden bg-gray-700 rounded-lg'}>
                     <span className={'h-[7.8vh] flex justify-center items-center transition text-gray-400 font-bold'}> {percentage}% </span>
                     {/*  genre bar level*/}
-                    <motion.div
-                        initial={'hidden'}
-                        variants={variants}
-                        whileInView={'visible'}
-                        custom={index + 1}
+
+                    {/* need to figure out how to make this work still with Framer */}
+                    {/*<motion.div*/}
+                    {/*    initial={'hidden'}*/}
+                    {/*    variants={variants}*/}
+                    {/*    whileInView={'visible'}*/}
+                    {/*    custom={index + 1}*/}
+                    {/*    style={{height: `${percentage}%`}}*/}
+                    {/*    className={`absolute right-0 bottom-0 left-0 rounded-lg ${color} origin-bottom`}/>*/}
+
+                    <div
                         style={{height: `${percentage}%`}}
                         className={`absolute right-0 bottom-0 left-0 rounded-lg ${color} origin-bottom`}/>
                 </div>
@@ -55,9 +61,8 @@ export const FavoriteGenres = ({favoriteGenres}) => {
         {row: 3, col: 11, color: 'bg-gradient-to-t from-purple-200 to-blue-500'},
         {row: 3, col: 13, color: 'bg-gradient-to-t from-purple-800 to-blue-500'},
         {row: 3, col: 15, color: 'bg-gradient-to-t from-blue-200 to-green-500'},
-        {row: 3, col: 17, color: 'bg-gradient-to-t from-blue-200 to-green-500'}
+        {row: 3, col: 17, color: 'bg-gradient-to-t from-teal-700 to-green-300'}
     ]
-
 
     if(!favoriteGenres) return null;
 
