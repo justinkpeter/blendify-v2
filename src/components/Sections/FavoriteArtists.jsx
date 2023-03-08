@@ -26,10 +26,10 @@ export const FavoriteArtists = ({favoriteArtists, onUpdateData}) => {
             <section className={'grid grid-cols-26 grid-rows-10 h-section relative'}>
                 <SectionIcon Icon={MicrophoneIcon} gradient={'bg-gradient-to-r from-green-400 to-blue-500'}/>
                 {/*    summary  */}
-                <div className={'relative grid grid-cols-7 col-[3_/_span_7] row-[4_/_span_6]  z-20'}>
+                <div className={'relative grid grid-cols-7 col-[3_/_span_7] row-[4_/_span_6]  z-20 '}>
                     <div className={'absolute top-0 left-0 leading-6'}>
-                        <h1 className={'my-5 font-black text-6xl 2xl:text-7xl text-white'}>
-                        <span className={'inline-block lg:pr-[5vh]'}>
+                        <h1 className={'my-5 font-black text-6xl  text-white'}>
+                        <span className={'inline-block lg:pr-[5vh] leading-[5rem]'}>
                             <motion.span initial={{opacity: 0 ,  y:100}} animate={{opacity: 1 ,  y:0 }} transition={{duration: 0.4, delay: 0.5}}> Grooving to </motion.span><br/>
                             <motion.span initial={{opacity: 0 ,  y:100}} animate={{opacity: 1 ,  y:0 }} transition={{duration: 0.4, delay: 0.8}} className={'break-normal text-green-400'}> {favoriteArtists[0]?.name} </motion.span>
                             <br/>

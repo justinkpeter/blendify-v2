@@ -15,21 +15,19 @@ export const StreamingAnalysis = ({user, playlists, favoriteTracks, favoriteArti
             <section className={'grid grid-cols-26 grid-rows-10 h-section w-[260vh] text-white'}>
                 <SectionIcon Icon={UserPlusIcon} gradient={'bg-gradient-to-r from-yellow-400 to-teal-500'}/>
 
-                <div className={'relative grid grid-cols-7 col-[3_/_span_7] row-[4_/_span_4]  z-20'}>
+                <div className={'relative grid grid-cols-7 col-[3_/_span_7] row-[4_/_span_4] z-20'}>
                     <div className={'absolute top-0 left-0 leading-6'}>
                         <h1 className={'my-5 font-black text-6xl 2xl:text-7xl text-white'}>
-                            <span className={'inline-block xl:pr-[5vh]'}>
+                            <span className={'inline-block xl:pr-[5vh] leading-[5rem]'}>
                                 <span> {user?.display_name.split(" ")[0] }, </span><br/>
-                                <span className={'break-normal text-green-400'}> all your tastes, blended into one </span>
+                                <span className={'break-normal text-green-400'}> here's your taste profile </span>
                                 <br/>
-
-                                {/*<span> has been on repeat </span><br/>*/}
                                 </span>
                         </h1>
                         <p className={'font-light text-xl text-gray-100 '}>
                             <span className={'inline-block leading-loose'}>
-                                Just an overall <span className={'italic'}> vibe </span> of your music taste.
-                                <span className={'italic'}> Keep grooving. </span>
+                                All of your analytics, <span className={'italic'}> blended </span> into a cohesive profile
+                                <span className={'italic'}>Your music taste is truly immaculate. </span>
                             </span>
                         </p>
                     </div>

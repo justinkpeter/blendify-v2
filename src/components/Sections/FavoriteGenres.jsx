@@ -78,7 +78,7 @@ export const FavoriteGenres = ({favoriteGenres}) => {
                 <div className={'relative grid grid-cols-7 col-[3_/_span_7] row-[4_/_span_6]  z-20'}>
                     <div className={'absolute top-0 left-0 leading-6'}>
                         <h1 className={'my-5 font-black text-6xl 2xl:text-7xl text-white'}>
-                            <span className={'inline-block xl:pr-[5vh]'}>
+                            <span className={'inline-block xl:pr-[5vh] leading-[5rem]'}>
                                 <span> {favoriteGenres[0]?.name} </span><br/>
                                 <span className={'break-normal text-green-400'}> is truly undefeated. </span>
                                 <br/>

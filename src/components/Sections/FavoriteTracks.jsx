@@ -22,12 +22,12 @@ export const FavoriteTracks = ({favoriteTracks}) => {
             <SectionIcon Icon={MusicalNoteIcon} gradient={'bg-gradient-to-r from-blue-400 to-red-500'}/>
                 {/* summary */}
                 <div className={'relative grid grid-cols-7 col-[3_/_span_7] row-[4_/_span_6] z-20'}>
-                    <div className={'absolute top-0 left-0 leading-6'}>
+                    <div className={'absolute top-0 left-0'}>
                         <h1 className={'my-5 font-black text-6xl 2xl:text-7xl text-white'}>
-                                <span className={'inline-block xl:pr-[5vh]'}>
+                                <span className={'inline-block xl:pr-[5vh] leading-[5rem]'}>
                                     <span className={'break-normal text-green-400'}> {favoriteTracks[0]?.artists[0].name} </span>
-                                    <br/>
-                                    <span> has been on repeat </span><br/>
+                                    <span> has been  </span><br/>
+                                    <span> on repeat </span>
                                  </span>
                         </h1>
                         <p className={'font-light text-xl text-gray-100 pr-[10vh]'}>
