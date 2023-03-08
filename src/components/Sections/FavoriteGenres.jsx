@@ -1,6 +1,8 @@
 import React from "react";
+import { SparklesIcon} from "@heroicons/react/20/solid";
+import { SectionIcon } from '../SectionIcon';
 // import { motion } from "framer-motion";
-const GenreBar = ({name, percentage, index, color}) => {
+const GenreBar = ({name, percentage, color}) => {
 
     // const variants = {
     //     visible: i => ({
@@ -69,8 +71,11 @@ export const FavoriteGenres = ({favoriteGenres}) => {
     return (
         <>
             <section className={' grid grid-cols-19 grid-rows-10 h-section w-[190vh] text-white '}>
+                <SectionIcon Icon={SparklesIcon} gradient={'bg-gradient-to-r from-orange-400 to-purple-500'}/>
+
+
                 {/*summary*/}
-                <div className={'relative grid grid-cols-7 col-[1_/_span_7] row-[4_/_span_6]  z-20'}>
+                <div className={'relative grid grid-cols-7 col-[3_/_span_7] row-[4_/_span_6]  z-20'}>
                     <div className={'absolute top-0 left-0 leading-6'}>
                         <h1 className={'my-5 font-black text-6xl 2xl:text-7xl text-white'}>
                             <span className={'inline-block xl:pr-[5vh]'}>
@@ -79,7 +84,7 @@ export const FavoriteGenres = ({favoriteGenres}) => {
                                 <br/>
                              </span>
                         </h1>
-                        <p className={'font-light text-xl text-gray-100 pr-[10vh]'}>
+                        <p className={'font-light text-xl text-gray-100 pr-[20vh]'}>
                             <span className={'inline-block leading-loose'}>
                                Looks like you're a <span className={'italic'}> huge </span>
                                 {favoriteGenres[0]?.name} fan! This genre appears in {favoriteGenres[0]?.percentage}%

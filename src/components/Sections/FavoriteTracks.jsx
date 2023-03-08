@@ -1,6 +1,8 @@
 import React from "react";
 import {Track} from "../TopTracks/Track";
 import {Tile} from "../Tile";
+import { SectionIcon } from '../SectionIcon';
+import { MusicalNoteIcon } from "@heroicons/react/20/solid";
 
 export const FavoriteTracks = ({favoriteTracks}) => {
 
@@ -17,11 +19,13 @@ export const FavoriteTracks = ({favoriteTracks}) => {
     return (
         <>
             <section className={'grid grid-cols-33 grid-rows-10 h-section w-[330vh]'}>
+            <SectionIcon Icon={MusicalNoteIcon} gradient={'bg-gradient-to-r from-blue-400 to-red-500'}/>
+                {/* summary */}
                 <div className={'relative grid grid-cols-7 col-[3_/_span_7] row-[4_/_span_6] z-20'}>
                     <div className={'absolute top-0 left-0 leading-6'}>
                         <h1 className={'my-5 font-black text-6xl 2xl:text-7xl text-white'}>
                                 <span className={'inline-block xl:pr-[5vh]'}>
-                                    <span className={'break-normal text-green-400'}> {favoriteTracks[0]?.name} </span>
+                                    <span className={'break-normal text-green-400'}> {favoriteTracks[0]?.artists[0].name} </span>
                                     <br/>
                                     <span> has been on repeat </span><br/>
                                  </span>

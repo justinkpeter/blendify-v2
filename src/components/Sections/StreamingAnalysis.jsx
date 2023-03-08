@@ -1,5 +1,7 @@
 import React from "react";
 import { GenrePill } from "../Modal";
+import { SectionIcon } from '../SectionIcon';
+import { UserPlusIcon } from "@heroicons/react/20/solid";
 export const StreamingAnalysis = ({user, playlists, favoriteTracks, favoriteArtists, favoriteGenres }) => {
 
     if(!user) return null;
@@ -11,7 +13,9 @@ export const StreamingAnalysis = ({user, playlists, favoriteTracks, favoriteArti
     return (
         <>
             <section className={'grid grid-cols-26 grid-rows-10 h-section w-[260vh] text-white'}>
-                <div className={'relative grid grid-cols-7 col-[4_/_span_7] row-[4_/_span_4]  z-20'}>
+                <SectionIcon Icon={UserPlusIcon} gradient={'bg-gradient-to-r from-yellow-400 to-teal-500'}/>
+
+                <div className={'relative grid grid-cols-7 col-[3_/_span_7] row-[4_/_span_4]  z-20'}>
                     <div className={'absolute top-0 left-0 leading-6'}>
                         <h1 className={'my-5 font-black text-6xl 2xl:text-7xl text-white'}>
                             <span className={'inline-block xl:pr-[5vh]'}>
@@ -57,7 +61,7 @@ export const StreamingAnalysis = ({user, playlists, favoriteTracks, favoriteArti
                         </div>
                     </div>
 
-
+                    {/* top artists*/}
                     <div className={'col-[4_/_span_2] row-[1_/span_6] pt-10 relative '}>
                         <div>
                             <div className="stat-title font-black text-2xl ">Your Top Artists </div>
@@ -87,6 +91,7 @@ export const StreamingAnalysis = ({user, playlists, favoriteTracks, favoriteArti
                         </div>
                     </div>
 
+                    {/* top tracks */}
                     <div className={'col-[7_/_span_3] row-[1_/span_6] pt-10 relative '}>
                         <div>
                             <div className="stat-title font-black text-2xl ">Your Top Tracks </div>

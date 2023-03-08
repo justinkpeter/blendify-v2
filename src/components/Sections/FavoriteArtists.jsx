@@ -2,6 +2,8 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import {ArtistCard} from '../ArtistCard/ArtistCard';
 import { GridItem } from '../GridItem';
+import { MicrophoneIcon } from "@heroicons/react/20/solid";
+import { SectionIcon } from '../SectionIcon';
 
 export const FavoriteArtists = ({favoriteArtists, onUpdateData}) => {
 
@@ -22,6 +24,7 @@ export const FavoriteArtists = ({favoriteArtists, onUpdateData}) => {
     return (
         <>
             <section className={'grid grid-cols-26 grid-rows-10 h-section relative'}>
+                <SectionIcon Icon={MicrophoneIcon} gradient={'bg-gradient-to-r from-green-400 to-blue-500'}/>
                 {/*    summary  */}
                 <div className={'relative grid grid-cols-7 col-[3_/_span_7] row-[4_/_span_6]  z-20'}>
                     <div className={'absolute top-0 left-0 leading-6'}>

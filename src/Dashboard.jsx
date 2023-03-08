@@ -2,7 +2,6 @@ import { useRef, useState, useLayoutEffect, useCallback, forwardRef } from "reac
 import ResizeObserver from "resize-observer-polyfill"
 import { motion, useTransform, useSpring, useScroll} from "framer-motion"
 
-import { FavoriteArtists } from "./components/FavoriteArtists";
 
 const ScrollContainer = ({ children }) => {
     return(
@@ -21,7 +20,7 @@ const SectionContainer = forwardRef(({ children, style }, ref) => {
 })
 
 
-const Sections = ({ children, id }) => {
+const Sections = ({ children }) => {
     return(
         <div className={'relative flex bg-zinc-900'}>
             {children}
