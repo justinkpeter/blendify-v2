@@ -61,7 +61,7 @@ const ProfileButton = ({user}) => {
             token: null
         })
     }
-
+    if(!user) return null;
     return(
         <>
             <div className={'navbar-end'}>
