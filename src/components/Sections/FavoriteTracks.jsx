@@ -4,7 +4,7 @@ import {Tile} from "../Tile";
 import { SectionIcon } from '../SectionIcon';
 import { MusicalNoteIcon } from "@heroicons/react/20/solid";
 
-export const FavoriteTracks = ({favoriteTracks}) => {
+export const FavoriteTracks = ({favoriteTracks, onUpdateData}) => {
 
     const gridPositions = [
         {row: 3, col: 11},
@@ -13,6 +13,17 @@ export const FavoriteTracks = ({favoriteTracks}) => {
         {row: 2, col: 25},
         {row: 4, col: 29}
     ]
+
+
+    const handleButtonClick = (track) => {
+        if(!track) return null;
+        track = {
+            type: 'track',
+            data: {...track}
+        }
+        return onUpdateData(track);
+    };
+
 
     if(!favoriteTracks) return null;
 
@@ -42,7 +53,7 @@ export const FavoriteTracks = ({favoriteTracks}) => {
                 { gridPositions.map((position, index) => {
                     if(index === 0){
                         return (
-                            <Tile col={11} row={3} large key={index}>
+                            <Tile col={11} row={3} large key={gridPositions[index].col}>
                                 <Track
                                     large
                                     rank={1}
@@ -51,13 +62,15 @@ export const FavoriteTracks = ({favoriteTracks}) => {
                                     artists={favoriteTracks[0]?.artists}
                                     explicit={favoriteTracks[0]?.explicit}
                                     preview={favoriteTracks[index]?.preview_url}
+                                    id={favoriteTracks[index]?.id}
+                                    handleTrackClick={() => handleButtonClick(favoriteTracks[index])}
                                 />
                             </Tile>
                         )
                     }
                     else{
                         return (
-                            <Tile col={position.col} row={position.row} key={index}>
+                            <Tile col={position.col} row={position.row} key={gridPositions[index].col} >
                                 <Track
                                     rank={index + 1}
                                     image={favoriteTracks[index]?.album?.images[0]?.url}
@@ -65,6 +78,8 @@ export const FavoriteTracks = ({favoriteTracks}) => {
                                     artists={favoriteTracks[index]?.artists}
                                     explicit={favoriteTracks[index]?.explicit}
                                     preview={favoriteTracks[index]?.preview_url}
+                                    id={favoriteTracks[index]?.id}
+                                    handleTrackClick={() => handleButtonClick(favoriteTracks[index])}
                                 />
                             </Tile>
                         )

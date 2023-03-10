@@ -14,8 +14,15 @@ export const FavoriteArtists = ({favoriteArtists, onUpdateData}) => {
         {row: 3, col: 19},
         {row: 2, col: 23}
     ]
+
     const handleButtonClick = (artist) => {
         if(!artist) return null;
+
+        artist = {
+            type: 'artist',
+            data: {...artist}
+        }
+
         return onUpdateData(artist);
     };
 
@@ -65,11 +72,7 @@ export const FavoriteArtists = ({favoriteArtists, onUpdateData}) => {
                         </GridItem>
                     )
                 })}
-
-
             </section>
-
-
         </>
     );
 }
