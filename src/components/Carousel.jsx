@@ -1,6 +1,5 @@
 import { useState } from "react";
 import {ArrowLongLeftIcon, ArrowLongRightIcon} from "@heroicons/react/24/solid";
-import {ListCard} from "./Modals/ListCard";
 
 
 const CarouselItem = ({item, index, showNumber}) => {
@@ -18,6 +17,15 @@ const CarouselItem = ({item, index, showNumber}) => {
                         <h3 className={'text-sm font-bold flex flex-col mb-2 '}>
                             <span className={'flex'}> { showNumber ? rank : '' } {item?.name} </span>
                         </h3>
+                        <div className={'flex flex-col'}>
+                            <span className={'text-xs text-gray-400'}> {item?.artists?.map((artist) => {
+                                return (
+                                    <>
+                                        <span> {artist.name}</span>
+                                    </>
+                                )
+                            })} </span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -57,6 +65,7 @@ export const Carousel = ({items, title, id, numbers}) =>{
         setColor(colorVariants['white'])
     };
 
+    if(items.length === 0) return null;
     return (
         <>
             <div className={'relative mb-16'}>
@@ -64,10 +73,10 @@ export const Carousel = ({items, title, id, numbers}) =>{
                     <h4 className={'text-2xl font-bold'}>{title} </h4>
                     <div className={'flex gap-4'}>
                         <button className="btn btn-sm btn-ghost btn-circle text-xl" onClick={handleScrollLeft} >
-                            { color == colorVariants['gray'] ? <ArrowLongLeftIcon className={'w-6 h-6 text-gray-500'}/> : <ArrowLongLeftIcon className={'w-6 h-6 text-white'}/> }
+                            { color === colorVariants['gray'] ? <ArrowLongLeftIcon className={'w-6 h-6 text-gray-500'}/> : <ArrowLongLeftIcon className={'w-6 h-6 text-white'}/> }
                         </button>
                         <button className="btn btn-sm btn-ghost btn-circle text-xl" onClick={handleScrollRight}>
-                            { color == colorVariants['gray'] ? <ArrowLongRightIcon className={'w-6 h-6 text-white'}/> : <ArrowLongRightIcon className={'w-6 h-6 text-gray-500'}/>  }
+                            { color === colorVariants['gray'] ? <ArrowLongRightIcon className={'w-6 h-6 text-white'}/> : <ArrowLongRightIcon className={'w-6 h-6 text-gray-500'}/>  }
                         </button>
                     </div>
                 </div>
