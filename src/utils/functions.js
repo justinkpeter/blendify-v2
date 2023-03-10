@@ -94,29 +94,93 @@ export function getScrollPercentage(){
 
 export function playLivePreview(id){
     const audio = document.getElementById(id)
-    if(audio == null) return;
+    if(!audio){
+        return;
+    }
     else{
-        audio.play();
-        const fade = setInterval(() => {
-            if (audio.volume < 0.99) {
-                audio.volume += 0.01;
-            } else {
-                clearInterval(fade);
-            }
-        }, 30);
+        try{
+            audio.play();
+            const fade = setInterval(() => {
+                if (audio.volume < 0.99) {
+                    audio.volume += 0.01;
+                } else {
+                    clearInterval(fade);
+                }
+            }, 30);
+        }catch(err){
+            console.log(err)
+            console.log( audio)
+        }
+
     }
 
 }
 
 export function pauseLivePreview(id){
-    const audio = document.getElementById(id)
-    if(audio == null) return;
-    const fade = setInterval(() => {
-        if (audio.volume > 0.01) {
-            audio.volume -= 0.01;
-        } else {
-            clearInterval(fade);
-            audio.pause();
-        }
-    }, 15);
+    const audio = document.getElementById(id )
+    if(!audio){
+        return;
+    }
+    else{
+        const fade = setInterval(() => {
+            if (audio.volume > 0.01) {
+                audio.volume -= 0.01;
+            } else {
+                clearInterval(fade);
+                if(audio){
+                    audio.pause();
+                }
+            }
+        }, 15);
+    }
+}
+
+export function enterFullscreen() {
+    const element = document.documentElement;
+
+    if (element.requestFullscreen) {
+        element.requestFullscreen();
+    } else if (element.webkitRequestFullscreen) {
+        element.webkitRequestFullscreen();
+    } else if (element.mozRequestFullScreen) {
+        element.mozRequestFullScreen();
+    } else if (element.msRequestFullscreen) {
+        element.msRequestFullscreen();
+    }
+}
+
+export function exitFullscreen(){
+    if (document.exitFullscreen) {
+        document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+    } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+    } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+    }
+}
+
+// Mute a singular HTML5 element
+function muteMe(elem) {
+    elem.muted = true;
+    elem.pause();
+}
+
+function unmuteMe(elem) {
+    elem.muted = false;
+    // elem.play();
+}
+
+// Try to mute all video and audio elements on the page
+export function mutePage() {
+    var elems = document.querySelectorAll("video, audio");
+
+    [].forEach.call(elems, function(elem) { muteMe(elem); });
+}
+
+export function unmutePage() {
+    var elems = document.querySelectorAll("video, audio");
+
+    [].forEach.call(elems, function(elem) { unmuteMe(elem); });
 }
