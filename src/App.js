@@ -237,18 +237,32 @@ function App() {
     // check if there is a token in the url
     useEffect(() => {
         const hash = getTokenFromUrl()
-        window.location.hash = ""
         const _token = hash.access_token
-
-        if(_token){
-
+        // console.log(hash)
+        if(hash.access_token){
+            // set token
+            dispatch({
+                type: 'SET_TOKEN',
+                token: _token
+            })
+            // set token to local storage
+            window.localStorage.setItem('token', _token)
+            // remove token from url
+            window.location.hash = ""
             getSpotifyData(_token)
-
-            // while data is being fetched, set the token
 
         }
 
-    } );
+
+        // if(_token){
+        //
+        //     getSpotifyData(_token)
+        //
+        //     // while data is being fetched, set the token
+        //
+        // }
+
+    });
 
 
     const [{shortTermTopArtists, shortTermTopTracks, topGenres, playlists, isLoaded } ] = useDataLayerValue();
