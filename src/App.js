@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Login } from "./Login";
 import { Dashboard } from "./Dashboard";
-import { Navbar } from "./components/Navbar";
 import { useDataLayerValue } from "./utils/DataLayer";
 import { getTokenFromUrl } from "./auth/spotify";
 import { Modal } from "./components/Modal";
@@ -39,7 +38,7 @@ function App() {
             longTermTopArtists: longTermTopArtists
         })
     }
-    const dispatchTopTracks = async (shortTermTopArtistsTopTracks, mediumTermTopArtistsTopTracks, longTermTopArtistsTopTracks) => {
+    const dispatchTopTracks = async (shortTermTopArtistsTopTracks) => {
         dispatch({
             type: 'shortTermTopArtistsTopTracks',
             shortTermTopArtistsTopTracks: shortTermTopArtistsTopTracks
@@ -226,26 +225,6 @@ function App() {
             })
         })
 
-        // spotify.getMyTopArtists({time_range: 'short_term', limit:50})
-        //     .then(response => console.log('response is', response))
-            // .then(data => {
-            //     // Extract the artist IDs from the response
-            //     const artistIds = data.items.map(item => item.id);
-            //     // Use the artist IDs to make individual requests to get more information about each artist
-            //     // const artistInfoUrls = artistIds.map(id => `https://api.spotify.com/v1/artists/${id}`);
-            //
-            //     return Promise.all(spotify.getArtists(artistIds).then(response => response.JSON()))
-            //     // return Promise.all(artistInfoUrls.map(url => fetch(url, { headers: { 'Authorization': `Bearer ${accessToken}` } }).then(response => response.json())));
-            // })
-            // .then(artistData => {
-            //     // Extract the unique artist names from the response
-            //     const artistNames = [...new Set(artistData.map(artist => artist.name))];
-            //     console.log(`The user has listened to ${artistNames.length} different artists within the last 4 months.`);
-            // })
-            // .catch(error => console.error(error));
-
-
-
         await dispatchTopArtists(shortTermTopArtists, mediumTermTopArtists, longTermTopArtists)
         await dispatchTopTracks(shortTermTopArtistsTopTracks)
         await dispatchFavoriteTracks(shortTermTopTracks, mediumTermTopTracks, longTermTopTracks)
@@ -272,82 +251,104 @@ function App() {
     } );
 
 
-    const Loading = ({isLoading, user}) => {
-        return(
-            <>
-                {isLoading && user ? null : <div className={'loading w-screen h-screen bg-zinc-900 relative z-50 '}>
-                    <div className={'absolute top-[43%] left-[45%] spinner animate-spin text-white '}>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-28 h-28 text-green-500">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
-                        </svg>
+    const [{shortTermTopArtists, shortTermTopTracks, topGenres, playlists, isLoaded } ] = useDataLayerValue();
 
-
-                    </div>
-
-                </div>}
-            </>
-        )
-    }
-
-
-    const [{shortTermTopArtists, shortTermTopTracks, topGenres, savedTracks, playlists, isLoaded } ] = useDataLayerValue();
-    const [selectedArtist, setSelectedArtist] = useState(null);
+    const [modalDataLoading, setModalDataLoading] = useState(true);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [modalData, setModalData] = useState(null);
 
     const handleUpdateData = async(newData) => {
 
+        // handle errors and null data
+        if(newData === null){
+            setModalData(null)
+            setModalOpen(false)
+            console.log('clearing data')
+            return
+        }
+
         // set modal state loading to true
 
-        // fetch new data
-        if(newData){
-            console.log(newData)
+        if(newData.type === 'track'){
+            setModalData(newData)
+            setModalOpen(true)
+            setModalDataLoading(true)
+
+           // get track release date
+            await spotify.getAlbum(newData.data.album.id).then((response) => {
+                newData.data.release_date = response.release_date
+            })
+
+            // get track audio features, like danceability, energy, etc
+            await spotify.getAudioFeaturesForTrack(newData.data.id).then((response) => {
+                newData.data.audio_features = response
+            })
+
+            // get related tracks
+            await spotify.getRecommendations({seed_tracks: [newData.data.id], limit: 50}).then((response) => {
+                newData.data.related_tracks = response.tracks
+            })
+
+            setModalData(newData)
+
+        }
+
+        if(newData.type === 'artist'){
+
+            console.log('opening artist modal')
+            setModalData(newData)
+            setModalOpen(true)
+            setModalDataLoading(true)
+
+
             // get artist data
-            const artistData = await spotify.getArtist(newData.id).then((response) => {
-                return response
+            await spotify.getArtist(newData.data.id).then((response) => {
+                newData.data = response
             })
 
             // get artist top tracks
-            const topTracks = await spotify.getArtistTopTracks(newData.id, 'US').then((response) => {
-                artistData.top_tracks = response.tracks
+            await spotify.getArtistTopTracks(newData.data.id, 'US').then((response) => {
+                newData.data.top_tracks = response.tracks
             })
 
             // get artist related artists
-            const relatedArtists = await spotify.getArtistRelatedArtists(newData.id).then((response) => {
-                artistData.related_artists = response.artists
+            await spotify.getArtistRelatedArtists(newData.data.id).then((response) => {
+                newData.data.related_artists = response.artists
             })
 
             // get artist related releases
-            const relatedReleases = await spotify.getArtistAlbums(newData.id, {limit: 50}).then((response) => {
-                artistData.related_releases = response.items
+            await spotify.getArtistAlbums(newData.data.id, {limit: 50}).then((response) => {
+                newData.data.related_releases = response.items
             })
 
-            setSelectedArtist(artistData)
         }
-
 
         // once data is fetched, set modal state loading to false
         setModalDataLoading(false)
-    };
 
-    const [modalDataLoading, setModalDataLoading] = useState(true);
+        // display data
+        setModalData(newData)
+        console.log('displaying data')
+
+    };
 
 
   return (
     <div>
-        <Navbar user={user}/>
-        <Modal loading={modalDataLoading} artist={selectedArtist}/>
+        <Modal isOpen={modalOpen} loading={modalDataLoading} data={modalData} onUpdateData={handleUpdateData}/>
 
         { !token ? <Login/> :
-            <Dashboard>
-                <Loading isLoading={isLoaded} user={user}/>
+            <Dashboard isLoaded={isLoaded} user={user}>
                 <FavoriteArtists favoriteArtists={shortTermTopArtists} onUpdateData={handleUpdateData}/>
-                <FavoriteTracks favoriteTracks={shortTermTopTracks} />
+                <FavoriteTracks favoriteTracks={shortTermTopTracks} onUpdateData={handleUpdateData}/>
                 <FavoriteGenres favoriteGenres={topGenres} />
                 <StreamingAnalysis
                     user={user}
                     favoriteGenres={topGenres}
                     playlists={playlists}
                     favoriteArtists={shortTermTopArtists}
-                    favoriteTracks={shortTermTopTracks}/>
+                    favoriteTracks={shortTermTopTracks}
+                />
             </Dashboard>
         }
     </div>
