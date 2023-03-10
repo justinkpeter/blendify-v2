@@ -1,6 +1,9 @@
-import { useRef, useState, useLayoutEffect, useCallback, forwardRef } from "react";
+import React, { useRef, useState, useLayoutEffect, useCallback, forwardRef } from "react";
 import ResizeObserver from "resize-observer-polyfill"
 import { motion, useTransform, useSpring, useScroll} from "framer-motion"
+import {LoadingSpinner} from "./components/LoadingSpinner";
+import {Navbar} from "./components/Navbar";
+import {Footer} from "./components/Footer";
 
 
 const ScrollContainer = ({ children }) => {
@@ -22,21 +25,14 @@ const SectionContainer = forwardRef(({ children, style }, ref) => {
 
 const Sections = ({ children }) => {
     return(
-        <div className={'relative flex bg-zinc-900'}>
+        <div className={'relative w-full flex bg-zinc-900'}>
             {children}
         </div>
     )
 }
 
-// const Section = ({ children, id }) => {
-//     return(
-//         <div className={'grid grid-cols-26 grid-rows-10 h-section'}>
-//             {children}
-//         </div>
-//     )
-// }
 
-export const Dashboard = ({children}) => {
+export const Dashboard = ({children, isLoaded, user}) => {
 
     const scrollRef = useRef(null)
     const ghostRef = useRef(null)
@@ -45,7 +41,7 @@ export const Dashboard = ({children}) => {
 
     useLayoutEffect(() => {
         scrollRef && setScrollRange(scrollRef.current.scrollWidth);
-    }, [scrollRef]);
+    }, [scrollRef, children]);
 
     const onResize = useCallback((entries) => {
         for (let entry of entries) {
@@ -68,16 +64,29 @@ export const Dashboard = ({children}) => {
     const physics = { damping: 15, mass: 0.27, stiffness: 55 };
     const spring = useSpring(transform, physics);
 
+
+
+    const LoadingScreen = () => {
+        return(
+            <div className={'relative h-screen w-screen'}>
+                <LoadingSpinner/>
+            </div>
+        )
+    }
+
     return (
         <>
             <ScrollContainer>
+                <Navbar user={user}/>
                 <SectionContainer ref={scrollRef} style={{x:spring}}>
-                    <Sections>
-                        {children}
-                    </Sections>
+                    { isLoaded === false ?
+                        <Sections> <LoadingScreen/> </Sections> :
+                        <Sections> {children} </Sections> }
                 </SectionContainer>
             </ScrollContainer>
             <div ref={ghostRef} style={{ height: scrollRange }} className={'w-screen'} />
+            <Footer/>
+
         </>
     );
 }
