@@ -61,14 +61,14 @@ const ProfileButton = ({user}) => {
             token: null
         })
     }
-    if(!user) return null;
+    if(user === null) return null;
     return(
         <>
             <div className={'navbar-end'}>
                 <label> { user?.display_name } </label>
                 <label className="avatar pl-4">
                     <div className="w-10 rounded-full">
-                        <img src={user?.images[0].url} alt={''}/>
+                        <img src={user?.images[0]?.url} alt={''}/>
                     </div>
                 </label>
                 <div className="dropdown dropdown-bottom dropdown-end">
