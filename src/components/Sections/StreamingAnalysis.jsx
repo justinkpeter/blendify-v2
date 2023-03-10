@@ -33,7 +33,7 @@ export const StreamingAnalysis = ({user, playlists, favoriteTracks, favoriteArti
                 <div className={'relative grid grid-cols-10 grid-rows-6 col-[11_/_span_12] row-[3_/_span_7]  p-5 z-20  rounded-3xl '}>
                     <div className={'relative col-[1_/_span_12] row-[1_/_span_2] group'}>
                         <div className=" relative w-full h-full rounded-2xl shadow-2xl overflow-hidden">
-                            <img src={ user?.images[0].url } alt={''} className={'h-full w-full object-cover group-hover:scale-125 duration-[1200ms] transition ease-in-out'}/>
+                            <img src={ user?.images[0]?.url } alt={''} className={'h-full w-full object-cover group-hover:scale-125 duration-[1200ms] transition ease-in-out'}/>
                             <div className={'w-full h-full absolute top-0 bg-black/80'}/>
                         </div>
                     </div>
@@ -47,7 +47,7 @@ export const StreamingAnalysis = ({user, playlists, favoriteTracks, favoriteArti
                         <div className={'px-3 py-6 w-54 h-64 flex flex-col items-center bg-zinc-800/30 rounded-lg hover:bg-zinc-500/30 duration-200 transition ease-in'}>
                             <div className="avatar">
                                 <div className="w-36 rounded-full shadow-2xl">
-                                    <img src={favoriteArtists[0]?.images[0].url } alt={''} />
+                                    <img src={favoriteArtists[0]?.images[0]?.url } alt={''} />
                                 </div>
                             </div>
                             <div className={'mt-6 w-full h-fit self-start'}>
@@ -58,7 +58,7 @@ export const StreamingAnalysis = ({user, playlists, favoriteTracks, favoriteArti
                         <div className={'px-3 py-6 w-54 h-64 flex flex-col items-center bg-zinc-800/30 rounded-lg hover:bg-zinc-500/30 duration-200 transition ease-in'}>
                             <div className="avatar">
                                 <div className="w-36 rounded-full shadow-2xl">
-                                    <img src={favoriteTracks[0]?.album.images[0].url } alt={''}/>
+                                    <img src={favoriteTracks[0]?.album.images[0]?.url } alt={''}/>
                                 </div>
                             </div>
                             <div className={'mt-6 w-full h-fit self-start overflow-hidden'}>
