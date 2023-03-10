@@ -12,16 +12,29 @@ export const initialState = {
     longTermTopTracks: [],
     longTermTopArtists: [],
 
-
+    topGenres: [],
+    me: null,
+    savedTracks: null,
+    isLoaded: false
 }
 const reducer = (state, action) => {
     //Action -> type, [payload]
 
     switch(action.type){
+        case 'IS_LOADED':
+            return{
+                ...state,
+                isLoaded: action.isLoaded
+            }
         case 'SET_USER':
             return{
                 ...state,
                 user: action.user
+            }
+        case 'SET_PLAYLISTS':
+            return{
+                ...state,
+                playlists: action.playlists
             }
         case 'SET_TOKEN':
             return{
@@ -63,6 +76,21 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 longTermTopArtists: action.longTermTopArtists
+            }
+        case 'topGenres':
+            return {
+                ...state,
+                topGenres: action.topGenres
+            }
+        case 'SET_ME':
+            return{
+                ...state,
+                me: action.user
+            }
+        case 'SET_SAVED_TRACKS':
+            return{
+                ...state,
+                savedTracks: action.savedTracks
             }
         default:
             return state
