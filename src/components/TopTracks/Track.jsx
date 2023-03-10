@@ -44,7 +44,8 @@ const TrackInfo = ({name, artists, previewUrl, previewTrack, id}) => {
         else if(previewTrack === false){
             pauseLivePreview(id)
         }
-    })
+
+    }, [id, previewTrack] )
 
     return(
         <>
@@ -67,7 +68,8 @@ const TrackInfo = ({name, artists, previewUrl, previewTrack, id}) => {
                         })}
                     </h3>
                 </div>
-                <audio id={name?.replace(/\s/g, '-').toLowerCase()} preload="none" src={previewUrl} ></audio>
+                {/*<audio id={name?.replace(/\s/g, '-').toLowerCase()} preload="none" src={previewUrl} ></audio>*/}
+                <audio id={id} preload="none" src={previewUrl} ></audio>
             </div>
         </>
     )
@@ -75,10 +77,9 @@ const TrackInfo = ({name, artists, previewUrl, previewTrack, id}) => {
 
 
 // parent component to display the track and all of its goods --- rank, image, name, artists
-export const Track = ({rank, image, name, large, artists, explicit, preview}) => {
+export const Track = ({rank, image, name, large, artists, explicit, preview, id, handleTrackClick}) => {
 
     const trackClass = large ? 'w-[50vh] h-full top-track relative' : 'w-[30vh] h-full top-track relative';
-    const trackId = name?.replace(/\s/g, '-').toLowerCase()
     const [isHovered, setIsHovered] = useState(false)
 
     const playTrack = () => {
@@ -93,10 +94,10 @@ export const Track = ({rank, image, name, large, artists, explicit, preview}) =>
 
     return(
         <>
-            <div className={trackClass} onMouseEnter={() => playTrack()} onMouseLeave={() => pauseTrack()}>
+            <div className={trackClass} onMouseEnter={() => playTrack()} onMouseLeave={() => pauseTrack()} onClick={() => handleTrackClick(id)}>
                 <TrackRank rank={rank} explicit={explicit}/>
                 <TrackImage image={image} large={large}/>
-                <TrackInfo name={name} artists={artists} previewUrl={preview} previewTrack={isHovered} id={trackId}/>
+                <TrackInfo name={name} artists={artists} previewUrl={preview} previewTrack={isHovered} id={id}/>
             </div>
         </>
     )

@@ -80,7 +80,7 @@ export const FavoriteGenres = ({favoriteGenres}) => {
                         <h1 className={'my-5 font-black text-6xl 2xl:text-7xl text-white'}>
                             <span className={'inline-block xl:pr-[5vh] leading-[5rem]'}>
                                 <span> {favoriteGenres[0]?.name} </span><br/>
-                                <span className={'break-normal text-green-400'}> is truly undefeated. </span>
+                                <span className={'break-normal text-green-400'}> goes hard </span>
                                 <br/>
                              </span>
                         </h1>
