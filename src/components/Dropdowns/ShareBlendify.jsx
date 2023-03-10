@@ -12,7 +12,7 @@ export const ShareBlendify = ({tabIndex}) => {
     const handleClick = (card) => {
         if(card === 'Copy Link') {
             // copy the link to the clipboard
-            navigator.clipboard.writeText('https://blendifyv2.netlify.app/')
+            navigator.clipboard.writeText('https://blendify.xyz/')
             // remove the alert after 2 seconds
             setCopyLink(true)
             setTimeout(() => {
