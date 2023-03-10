@@ -6,8 +6,8 @@
 
 // auth data
 const CLIENT_ID = "b136039c2bad4a978b33db20e143a30a"
-// const REDIRECT_URI = "https://blendify.xyz"
-const REDIRECT_URI = "http://localhost:3000"
+const REDIRECT_URI = "https://blendify.xyz"
+// const REDIRECT_URI = "http://localhost:3000"
 
 const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
 // const RESPONSE_TYPE = "token"
