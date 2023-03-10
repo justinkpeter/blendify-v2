@@ -22,7 +22,7 @@ export const ProgressPill = () => {
 
     function getScrollerStyle( label ){
         switch(label) {
-            default:  setScrollerStyle('translate3d(0px, 0%, 0px)')
+            default:  setScrollerStyle('translate3d(0px, -75%, 0px)')
                 break
             case "Favorite Artists":
                 setScrollerStyle('translate3d(0px, 0%, 0px)')
@@ -43,7 +43,7 @@ export const ProgressPill = () => {
     // handles label on progress bar when scrolling through sections
     useEffect(() => {
         document.addEventListener("scroll", () => {
-            const currentSection = sections[Math.floor(getScrollPercentage() /  ( 100 / sections.length ))]?.name
+            const currentSection = sections[Math.floor(getScrollPercentage() / 25)]?.name
             getScrollerStyle(currentSection)
         });
 
