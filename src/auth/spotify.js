@@ -14,11 +14,7 @@ const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
 
 // user scopes
 const scopes = [
-    "user-read-currently-playing",
-    "user-read-recently-played",
-    "user-read-playback-state",
     "user-top-read",
-    "user-modify-playback-state",
     "user-library-read"
 ];
 
